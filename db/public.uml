@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>DATABASE</ID>
+  <OriginalElement>48b64169-752b-4923-a4d1-db4d30332f8c.SCHEMA:library.public</OriginalElement>
+  <nodes>
+    <node x="54.0" y="352.5">48b64169-752b-4923-a4d1-db4d30332f8c.TABLE:library.public.genre</node>
+    <node x="278.0" y="570.5">48b64169-752b-4923-a4d1-db4d30332f8c.TABLE:library.public.author</node>
+    <node x="57.5" y="602.5">48b64169-752b-4923-a4d1-db4d30332f8c.TABLE:library.public.author_genre</node>
+    <node x="288.5" y="101.5">48b64169-752b-4923-a4d1-db4d30332f8c.TABLE:library.public.publisher</node>
+    <node x="522.0" y="10.5">48b64169-752b-4923-a4d1-db4d30332f8c.TABLE:library.public.users</node>
+    <node x="758.0" y="-33.5">48b64169-752b-4923-a4d1-db4d30332f8c.TABLE:library.public.reader_card</node>
+    <node x="753.0" y="297.5">48b64169-752b-4923-a4d1-db4d30332f8c.TABLE:library.public.entry</node>
+    <node x="257.5" y="286.5">48b64169-752b-4923-a4d1-db4d30332f8c.TABLE:library.public.book</node>
+    <node x="530.5" y="232.5">48b64169-752b-4923-a4d1-db4d30332f8c.TABLE:library.public.authority</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="48b64169-752b-4923-a4d1-db4d30332f8c.TABLE:library.public.entry" target="48b64169-752b-4923-a4d1-db4d30332f8c.TABLE:library.public.book">
+      <point x="-87.0" y="-0.0" />
+      <point x="102.5" y="-0.0" />
+    </edge>
+    <edge source="48b64169-752b-4923-a4d1-db4d30332f8c.TABLE:library.public.author_genre" target="48b64169-752b-4923-a4d1-db4d30332f8c.TABLE:library.public.author">
+      <point x="62.5" y="-0.0" />
+      <point x="-82.0" y="-0.0" />
+    </edge>
+    <edge source="48b64169-752b-4923-a4d1-db4d30332f8c.TABLE:library.public.book" target="48b64169-752b-4923-a4d1-db4d30332f8c.TABLE:library.public.genre">
+      <point x="-102.5" y="-0.0" />
+      <point x="66.0" y="-0.0" />
+    </edge>
+    <edge source="48b64169-752b-4923-a4d1-db4d30332f8c.TABLE:library.public.book" target="48b64169-752b-4923-a4d1-db4d30332f8c.TABLE:library.public.author">
+      <point x="0.0" y="113.5" />
+      <point x="0.0" y="-69.5" />
+    </edge>
+    <edge source="48b64169-752b-4923-a4d1-db4d30332f8c.TABLE:library.public.book" target="48b64169-752b-4923-a4d1-db4d30332f8c.TABLE:library.public.publisher">
+      <point x="0.0" y="-113.5" />
+      <point x="0.0" y="58.5" />
+    </edge>
+    <edge source="48b64169-752b-4923-a4d1-db4d30332f8c.TABLE:library.public.author_genre" target="48b64169-752b-4923-a4d1-db4d30332f8c.TABLE:library.public.genre">
+      <point x="0.0" y="-37.5" />
+      <point x="0.0" y="47.5" />
+    </edge>
+    <edge source="48b64169-752b-4923-a4d1-db4d30332f8c.TABLE:library.public.entry" target="48b64169-752b-4923-a4d1-db4d30332f8c.TABLE:library.public.reader_card">
+      <point x="0.0" y="-102.5" />
+      <point x="0.0" y="113.5" />
+    </edge>
+    <edge source="48b64169-752b-4923-a4d1-db4d30332f8c.TABLE:library.public.reader_card" target="48b64169-752b-4923-a4d1-db4d30332f8c.TABLE:library.public.users">
+      <point x="-82.0" y="-0.0" />
+      <point x="78.0" y="-0.0" />
+    </edge>
+    <edge source="48b64169-752b-4923-a4d1-db4d30332f8c.TABLE:library.public.users" target="48b64169-752b-4923-a4d1-db4d30332f8c.TABLE:library.public.authority">
+      <point x="0.0" y="69.5" />
+      <point x="0.0" y="-47.5" />
+    </edge>
+  </edges>
+  <settings layout="Directed Orthogonal" zoom="0.6507177033492823" x="449.43750000000006" y="364.00000000000006" />
+  <SelectedNodes>
+    <node>48b64169-752b-4923-a4d1-db4d30332f8c.TABLE:library.public.authority</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Key columns</Category>
+    <Category>Columns</Category>
+    <Category>Virtual foreign keys</Category>
+  </Categories>
+</Diagram>
+
