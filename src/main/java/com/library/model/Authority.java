@@ -2,7 +2,7 @@ package com.library.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "authority")
@@ -13,17 +13,17 @@ public class Authority implements Serializable {
     @Column(name = "id_authority")
     private Integer id;
 
-    @Column(name = "role")
-    private String role;
-//
-    @OneToMany(mappedBy = "authority", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<User> userList;
+    @Column(name = "name_authority")
+    private String nameAuthority;
+
+    @ManyToMany(mappedBy = "authority", cascade = CascadeType.ALL)
+    private Set<User> users;
 
     private Authority(){}
 
-    public Authority(String role, List<User> userList) {
-        this.role = role;
-        this.userList = userList;
+    public Authority(String nameAuthority, Set<User> users) {
+        this.nameAuthority = nameAuthority;
+        this.users = users;
     }
 
     public Integer getId() {
@@ -34,19 +34,19 @@ public class Authority implements Serializable {
         this.id = id;
     }
 
-    public String getRole() {
-        return role;
+    public String getNameAuthority() {
+        return nameAuthority;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setNameAuthority(String nameAuthority) {
+        this.nameAuthority = nameAuthority;
     }
 
-    public List<User> getUserList() {
-        return userList;
+    public Set<User> getUsers() {
+        return users;
     }
 
-    public void setUserList(List<User> userList) {
-        this.userList = userList;
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 }

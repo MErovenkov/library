@@ -48,12 +48,19 @@ CREATE TABLE IF NOT EXISTS authority(
 
 CREATE TABLE IF NOT EXISTS users(
     id_user int PRIMARY KEY NOT NULL,
-    id_authority int NOT NULL,
     username varchar(255) NOT NULL,
     password varchar(255) NOT NULL,
 
     FOREIGN KEY(id_authority) REFERENCES authority(id_authority),
 );
+
+CREATE TABLE IF NOT EXISTS users_authority(
+    id_user int PRIMARY KEY NOT NULL,
+    id_authority int PRIMARY KEY NOT NULL,
+
+    FOREIGN KEY(id_user) REFERENCES users(id_user),
+    FOREIGN KEY(id_authority) REFERENCES authority(id_authority),
+)
 
 CREATE TABLE IF NOT EXISTS reader_card(
     id_reader_card int PRIMARY KEY NOT NULL ,
