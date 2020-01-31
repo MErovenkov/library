@@ -17,6 +17,12 @@ public class AuthorDao extends AbstractJpaDao<Author> implements IAuthorDao {
     }
 
     @Override
+    public Author findAuthorByFullName(Author author) {
+        //todo: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        return null;
+    }
+
+    @Override
     public boolean duplicateCheck(Author author) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Author> criteriaQuery = criteriaBuilder.createQuery(Author.class);
@@ -25,7 +31,7 @@ public class AuthorDao extends AbstractJpaDao<Author> implements IAuthorDao {
         Predicate name = criteriaBuilder.like(root.get("name"), author.getName());
         Predicate surname = criteriaBuilder.like(root.get("surname"), author.getSurname());
         Predicate patronymic = criteriaBuilder.like(root.get("patronymic"), author.getPatronymic());
-//+ proverka na Ganre
+//+ proverka na Ganre todo:
 
 
         return criteriaQuery.select(root).where(criteriaBuilder

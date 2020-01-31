@@ -49,6 +49,7 @@ public abstract class AbstractJpaDao<T extends Serializable> implements IGeneric
 
     public void deleteById(Integer entityId) throws NullPointerException {
         T entity = findOneById(entityId);
+
         if(entity != null) {
             delete(entity);
         } else throw new NullPointerException();

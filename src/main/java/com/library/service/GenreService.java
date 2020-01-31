@@ -12,25 +12,56 @@ import java.util.List;
 public class GenreService implements IGenreService {
 
     @Autowired
-    private IGenreDao iGenreRepository;
+    private IGenreDao iGenreDao;
 
     @Override
     public void createGenre(Genre genre) {
-        this.iGenreRepository.create(genre);
+
+        // todo: проверка
+
+        this.iGenreDao.create(genre);
+    }
+
+
+    @Override
+    public Genre updateGenre(Integer idGenre, Genre newDataGenre) {
+
+        // todo: проверка на наличие
+
+        Genre genre = this.iGenreDao.findOneById(idGenre);
+
+        genre.setName(newDataGenre.getName());
+
+        return this.iGenreDao.update(genre);
     }
 
     @Override
     public void deleteGenreById(Integer idGenre) {
-        this.iGenreRepository.deleteById(idGenre);
+
+        // todo: проверка
+
+        this.iGenreDao.deleteById(idGenre);
     }
 
     @Override
-    public Genre getGenreById(Integer idGenre) {
-        return this.iGenreRepository.findOneById(idGenre);
+    public Genre findGenreById(Integer idGenre) {
+
+        // todo: проверка на наличие
+
+        return this.iGenreDao.findOneById(idGenre);
+    }
+
+    // todo: возможно стоит убрать
+    @Override
+    public Genre findGenreByName(String nameGenre) {
+
+        // todo: проверка на наличие
+
+        return this.iGenreDao.findGenreByName(nameGenre);
     }
 
     @Override
-    public List<Genre> getGenreList() {
-        return this.iGenreRepository.findAll();
+    public List<Genre> findGenreList() {
+        return this.iGenreDao.findAll();
     }
 }

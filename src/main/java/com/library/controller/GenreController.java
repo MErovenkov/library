@@ -19,8 +19,11 @@ public class GenreController {
         this.iGenreService.createGenre(genre);
     }
 
-
-    /// ?delete @RequestBody...?
+    @PutMapping("/{idGenre}")
+    public Genre updateGenre(@PathVariable Integer idGenre,
+                                     @RequestBody Genre genre) {
+        return this.iGenreService.updateGenre(idGenre, genre);
+    }
 
     @DeleteMapping("/{idGenre}")
     public void deleteGenreById(@PathVariable Integer idGenre) {
@@ -29,15 +32,16 @@ public class GenreController {
 
     @GetMapping("/{idGenre}")
     public Genre getGenreById(@PathVariable Integer idGenre) {
-        return this.iGenreService.getGenreById(idGenre);
+        return this.iGenreService.findGenreById(idGenre);
+    }
+
+    @GetMapping("/{nameGenre}")
+    public Genre findGenreByName(@PathVariable String nameGenre) {
+        return this.iGenreService.findGenreByName(nameGenre);
     }
 
     @GetMapping("/")
     public List<Genre> getGenreList() {
-        return this.iGenreService.getGenreList();
+        return this.iGenreService.findGenreList();
     }
-
-
-    //вывод по имени жанра
-    /// сортировки + update???
 }

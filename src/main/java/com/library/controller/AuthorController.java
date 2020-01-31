@@ -19,9 +19,10 @@ public class AuthorController {
         this.iAuthorService.createAuthor(author);
     }
 
-    @DeleteMapping
-    public void deleteAuthor(@RequestBody Author author) {
-        this.iAuthorService.deleteAuthor(author);
+    @PutMapping("/{idAuthor}")
+    public Author updateAuthor(@PathVariable Integer idAuthor,
+                             @RequestBody Author author) {
+        return this.iAuthorService.updateAuthor(idAuthor, author);
     }
 
     @DeleteMapping("/{idAuthor}")
@@ -31,14 +32,17 @@ public class AuthorController {
 
     @GetMapping("/{idAuthor}")
     public Author getAuthorById(@PathVariable Integer idAuthor) {
-        return this.iAuthorService.getAuthorById(idAuthor);
+        return this.iAuthorService.findAuthorById(idAuthor);
+    }
+
+    @GetMapping("/")
+    public Author findAuthorByFullName(@RequestBody Author author) {
+        return this.iAuthorService.findAuthorByFullName(author);
     }
 
     @GetMapping("/")
     public List<Author> getAuthorList() {
-        return this.iAuthorService.getAuthorList();
+        return this.iAuthorService.findAuthorList();
     }
 
-    /// сортировки + update
-        /// сортировка по алфавиту
 }

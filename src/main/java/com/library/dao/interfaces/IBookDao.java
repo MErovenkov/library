@@ -4,4 +4,6 @@ import com.library.model.Book;
 
 public interface IBookDao extends IGenericDao<Book> {
 
+    Book findBookByName(String nameBook);
+
 }

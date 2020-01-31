@@ -2,6 +2,7 @@ package com.library.service;
 
 import com.library.dao.interfaces.IAuthorDao;
 import com.library.model.Author;
+import com.library.model.Genre;
 import com.library.service.interfaces.IAuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ import java.util.List;
 public class AuthorService implements IAuthorService {
 
     @Autowired
-    private IAuthorDao iAuthorRepository;
+    private IAuthorDao iAuthorDao;
 
     @Override
     public void createAuthor(Author author) {
@@ -22,10 +23,11 @@ public class AuthorService implements IAuthorService {
                 //ФИ пусто
             } else if (author.getGenreList() == null) {
                 //хотябы 1 жанр
-            } else if (this.iAuthorRepository.duplicateCheck(author)) {
+                //todo:
+            } else if (this.iAuthorDao.duplicateCheck(author)) {
                 //автор есть
             } else {
-                this.iAuthorRepository.create(specialFormatFullName(author));
+                this.iAuthorDao.create(specialFormatFullName(author));
             }
         }
     }
@@ -45,25 +47,42 @@ public class AuthorService implements IAuthorService {
     }
 
     @Override
-    public void deleteAuthor(Author author) {
-//////////
+    public Author updateAuthor(Integer idAuthor, Author newDataAuthor) {
+
+        // todo: проверка на наличие
+
+        Author author = this.iAuthorDao.findOneById(idAuthor);
+
+        author.setSurname(newDataAuthor.getSurname());
+        author.setName(newDataAuthor.getName());
+        author.setPatronymic(newDataAuthor.getPatronymic());
+
+        return this.iAuthorDao.update(author);
     }
+
 
     @Override
     public void deleteAuthorById(Integer idAuthor) {
         //
-       this.iAuthorRepository.deleteById(idAuthor);
+       this.iAuthorDao.deleteById(idAuthor);
     }
 
     @Override
-    public Author getAuthorById(Integer idAuthor) {
-        return this.iAuthorRepository.findOneById(idAuthor);
+    public Author findAuthorById(Integer idAuthor) {
+        return this.iAuthorDao.findOneById(idAuthor);
+    }
+
+    // todo: возможно стоит убрать
+    @Override
+    public Author findAuthorByFullName(Author author) {
+
+        // todo: проверка на наличие
+
+        return this.iAuthorDao.findAuthorByFullName(author);
     }
 
     @Override
-    public List<Author> getAuthorList() {
-        return this.iAuthorRepository.findAll();
+    public List<Author> findAuthorList() {
+        return this.iAuthorDao.findAll();
     }
-
-    ///
 }

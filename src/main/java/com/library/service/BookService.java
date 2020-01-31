@@ -12,7 +12,7 @@ import java.util.List;
 public class BookService implements IBookService {
 
     @Autowired
-    private IBookDao iBookRepository;
+    private IBookDao iBookDao;
 
     @Override
     public void createBook(Book book) {
@@ -36,13 +36,65 @@ public class BookService implements IBookService {
         } else {
             //NULL
         }*/
-           this.iBookRepository.create(book);
+           this.iBookDao.create(book);
     }
+
+
+
+    @Override
+    public Book updateBook(Integer idBook, Book newDataBook) {
+
+        // todo: проверка на наличие
+
+        Book book = this.iBookDao.findOneById(idBook);
+
+
+
+        return this.iBookDao.update(book);
+    }
+
+
+
 
     @Override
     public void deleteBookById(Integer idBook) {
         ///
-        this.iBookRepository.deleteById(idBook);
+        this.iBookDao.deleteById(idBook);
+    }
+
+    @Override
+    public Book findBookById(Integer idBook) {
+        if(this.iBookDao.findOneById(idBook) == null) {
+            ///
+            return null;
+        } else return this.iBookDao.findOneById(idBook);
+    }
+
+
+
+
+
+    // todo: возможно стоит убрать
+    @Override
+    public Book findBookByName(String nameBook) {
+
+        // todo: проверка на наличие
+
+        return this.iBookDao.findBookByName(nameBook);
+    }
+
+
+
+
+
+
+    @Override
+    public List<Book> findBookList() {
+        if(this.iBookDao.findAll() == null) {
+            ///
+            return null;
+        } else return this.iBookDao.findAll();
+
     }
 
     /*
@@ -52,22 +104,4 @@ public class BookService implements IBookService {
 
         } else this.iBookDao.deleteById(idBook);
     }*/
-
-    @Override
-    public Book getBookById(Integer idBook) {
-        if(this.iBookRepository.findOneById(idBook) == null) {
-            ///
-            return null;
-        } else return this.iBookRepository.findOneById(idBook);
-    }
-
-
-    @Override
-    public List<Book> getBookList() {
-        if(this.iBookRepository.findAll() == null) {
-            ///
-            return null;
-        } else return this.iBookRepository.findAll();
-
-    }
 }

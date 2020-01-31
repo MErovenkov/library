@@ -8,12 +8,14 @@ public interface IBookService {
 
     void createBook(Book book);
 
+    Book updateBook(Integer idBook, Book newDataBook);
+
     void deleteBookById(Integer idBook);
 
-    Book getBookById(Integer idBook);
+    Book findBookById(Integer idBook);
 
+    Book findBookByName(String nameBook);
 
-
-    List<Book> getBookList();
+    List<Book> findBookList();
 
 }

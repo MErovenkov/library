@@ -20,7 +20,20 @@ public class BookController {
     }
 
 
-    /// ?delete @RequestBody...?
+
+
+
+    @PutMapping("/{idBook}")
+    public Book updateGenre(@PathVariable Integer idBook,
+                             @RequestBody Book book) {
+        return this.iBookService.updateBook(idBook, book);
+    }
+
+
+
+
+
+
 
     @DeleteMapping("/{idBook}")
     public void deleteBookById(@PathVariable Integer idBook) {
@@ -29,25 +42,36 @@ public class BookController {
 
     @GetMapping("/{idBook}")
     public Book getBookById(@PathVariable Integer idBook) {
-        return this.iBookService.getBookById(idBook);
+        return this.iBookService.findBookById(idBook);
     }
+
+
+
+
+
+
+
+    @GetMapping("/{nameBook}")
+    public Book findBookByName(@PathVariable String nameBook) {
+        return this.iBookService.findBookByName(nameBook);
+    }
+
+
+
+
+
 
     @GetMapping("/")
     public List<Book> getBookList() {
-        return this.iBookService.getBookList();
+        return this.iBookService.findBookList();
     }
 
-    /*   @PostMapping
-    public void addMaster(@RequestBody Master master,
-                          @RequestParam(name = "garage") Integer numberGarage) {
-        this.iMasterService.addMaster(master, numberGarage);
-    }
-
+    /*
     @GetMapping("/sort")
-    public List<Master> getSortMastersList(@RequestParam(name = "comparator",
-                                                         defaultValue = "surname")
-                                                       String nameComparator) {
-        return this.iMasterService.getSortMastersList(nameComparator);
+@RequestParam(name = "comparator",
+                     defaultValue = "surname")
+                                String nameComparator) {
+
     }*/
 
 
