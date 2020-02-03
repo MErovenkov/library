@@ -1,6 +1,8 @@
 package com.library.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -17,16 +19,18 @@ public class Book implements Serializable {
 
     @Column(name = "name")
     private String name;
-//
+
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "id_author")
     private Author author;
-//
+
     @ManyToOne
     @JoinColumn(name = "id_genre")
     private Genre genre;
-//
+
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "id_publisher")
     private Publisher publisher;
 
@@ -39,7 +43,7 @@ public class Book implements Serializable {
     @Column(name = "in_stock")
     private boolean inStock;
 
-    @JsonIgnore
+    @JsonManagedReference
     @OneToMany(mappedBy = "book")
     private List<Entry> entry;
 

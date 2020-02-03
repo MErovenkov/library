@@ -1,5 +1,7 @@
 package com.library.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.library.model.enums.EntryStatus;
 
 import javax.persistence.*;
@@ -15,11 +17,13 @@ public class Entry implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    //
     @ManyToOne
     @JoinColumn(name = "id_reader_card")
     private ReaderCard readerCard;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "id_book")
     private Book book;
 

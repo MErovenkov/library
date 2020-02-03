@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface IGenreService {
 
-    void createGenre(Genre genre);
+    Genre createGenre(Genre genre);
 
     Genre updateGenre(Integer idGenre, Genre newDataGenre);
 
-    void deleteGenreById(Integer idGenre);
+    Genre deleteGenreById(Integer idGenre);
 
     Genre findGenreById(Integer idGenre);
 

@@ -1,10 +1,13 @@
 package com.library.model;
 
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 @Getter
@@ -25,7 +28,7 @@ public class Author extends Person implements Serializable {
             inverseJoinColumns =  @JoinColumn(name = "id_genre"))
     private List<Genre> genreList;
 
-   // @JsonIgnore
+    @JsonIgnore
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Book> bookList;
 
@@ -33,8 +36,7 @@ public class Author extends Person implements Serializable {
         super();
     }
 
-    public Author(String surname, String name, String patronymic,
-                  Genre genre) {
+    public Author(String surname, String name, String patronymic) {
         super(surname, name, patronymic);
     }
 }

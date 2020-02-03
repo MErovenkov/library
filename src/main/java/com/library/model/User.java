@@ -1,12 +1,20 @@
 package com.library.model;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Set;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "users")
-public class User implements Serializable {
+public class User implements Serializable, UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,44 +44,33 @@ public class User implements Serializable {
         this.authority = authority;
     }
 
-    public Integer getId() {
-        return id;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
+    @Override
     public String getUsername() {
-        return userName;
+        return null;
     }
 
-    public void setUsername(String userName) {
-        this.userName = userName;
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
     }
 
-
-    public String getPassword() {
-        return password;
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
     }
 
-    public Set<Authority> getAuthority() {
-        return authority;
-    }
-
-    public void setAuthority(Set<Authority> authority) {
-        this.authority = authority;
-    }
-
-    public ReaderCard getReaderCard() {
-        return readerCard;
-    }
-
-    public void setReaderCard(ReaderCard readerCard) {
-        this.readerCard = readerCard;
+    @Override
+    public boolean isEnabled() {
+        return false;
     }
 }

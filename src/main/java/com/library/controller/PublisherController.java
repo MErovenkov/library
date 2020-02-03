@@ -12,37 +12,38 @@ import java.util.List;
 public class PublisherController {
 
     @Autowired
-    private IPublisherService iPublisherService;
+    private IPublisherService publisherService;
 
-    @PostMapping
-    public void createPublisher(@RequestBody Publisher publisher) {
-        this.iPublisherService.createPublisher(publisher);
+    @PostMapping("/")
+    public Publisher createPublisher(@RequestBody Publisher publisher) {
+        return this.publisherService.createPublisher(publisher);
     }
 
     @PutMapping("/{idPublisher}")
     public Publisher updatePublisher(@PathVariable Integer idPublisher,
                                      @RequestBody Publisher publisher) {
-        return this.iPublisherService.updatePublisher(idPublisher, publisher);
+        return this.publisherService.updatePublisher(idPublisher, publisher);
     }
 
     @DeleteMapping("/{idPublisher}")
-    public void deletePublisherById(@PathVariable Integer idPublisher) {
-        this.iPublisherService.deletePublisherById(idPublisher);
+    public Publisher deletePublisherById(@PathVariable Integer idPublisher) {
+        return this.publisherService.deletePublisherById(idPublisher);
     }
 
     @GetMapping("/{idPublisher}")
     public Publisher findPublisherById(@PathVariable Integer idPublisher) {
-        return this.iPublisherService.findPublisherById(idPublisher);
+        return this.publisherService.findPublisherById(idPublisher);
     }
 
-    @GetMapping("/{namePublisher}")
+    //todo:
+    @GetMapping("/name/{namePublisher}")
     public Publisher findPublisherByName(@PathVariable String namePublisher) {
-        return this.iPublisherService.findPublisherByName(namePublisher);
+        return this.publisherService.findPublisherByName(namePublisher);
     }
 
     @GetMapping("/")
     public List<Publisher> getPublisherList() {
-        return this.iPublisherService.findPublisherList();
+        return this.publisherService.findPublisherList();
     }
 
 }

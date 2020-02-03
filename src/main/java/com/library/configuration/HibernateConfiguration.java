@@ -2,6 +2,7 @@ package com.library.configuration;
 
 import org.hibernate.cfg.Environment;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
@@ -21,6 +22,7 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories("com.library.dao")
+@ComponentScan("com.library")
 public class HibernateConfiguration {
 
     private final static String DATABASE_DIALECT = "org.hibernate.dialect.PostgreSQL10Dialect";
@@ -64,7 +66,7 @@ public class HibernateConfiguration {
                 = new HibernateJpaVendorAdapter();
 
         hibernateJpaVendorAdapter.setDatabase(Database.POSTGRESQL);
-        hibernateJpaVendorAdapter.setGenerateDdl(true);
+       // hibernateJpaVendorAdapter.setGenerateDdl(true);
 
         return hibernateJpaVendorAdapter;
     }
@@ -90,11 +92,4 @@ public class HibernateConfiguration {
         return transactionManager;
     }
 
-
-/*
-    ///
-    @Bean
-    public PersistenceExceptionTranslationPostProcessor exceptionTranslation(){
-        return new PersistenceExceptionTranslationPostProcessor();
-    }*/
 }

@@ -1,8 +1,8 @@
 package com.library.configuration;
 
+
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-///AbstractAnnotationConfigDispatcherServletInitializer || WebApplicationInitializer
 public class ApplicationInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     @Override
@@ -12,10 +12,10 @@ public class ApplicationInitializer extends AbstractAnnotationConfigDispatcherSe
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[] {WebConfiguration.class};
+        return new Class[] {HibernateConfiguration.class}; //+securityconf
     }
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return null;}
+        return new Class[] {WebConfiguration.class};}
 }

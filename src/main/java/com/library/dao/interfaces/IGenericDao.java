@@ -7,14 +7,16 @@ public interface IGenericDao<T extends Serializable> {
 
     T findOneById(Integer id);
 
+    T findByName(String name);
+
     List<T> findAll();
 
-    void create(T entity);
+    T create(T entity);
 
     T update(T entity);
 
-    void delete(T entity);
+    T delete(T entity);
 
-    void deleteById(Integer entityId);
+    T deleteById(Integer entityId);
 
 }

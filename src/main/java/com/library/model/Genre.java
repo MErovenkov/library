@@ -1,15 +1,18 @@
 package com.library.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
-//todo:
 /**
- *
+ *  Класс Жанр,
+ *  служит для обозначния принадлежности книг
+ *  и авторов к какому-то определённому направлению.
  * */
 
 @Getter
@@ -23,11 +26,11 @@ public class Genre implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "genreList", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "genreList", cascade = CascadeType.ALL)
     private List<Author> authorList;
 
     @JsonIgnore

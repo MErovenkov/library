@@ -12,59 +12,45 @@ import java.util.List;
 public class BookController {
 
     @Autowired
-    private IBookService iBookService;
+    private IBookService bookService;
 
-    @PostMapping
+    @PostMapping("/")
     public void createBook(@RequestBody Book book) {
-        this.iBookService.createBook(book);
+        this.bookService.createBook(book);
     }
-
-
-
-
 
     @PutMapping("/{idBook}")
-    public Book updateGenre(@PathVariable Integer idBook,
+    public Book updateBook(@PathVariable Integer idBook,
                              @RequestBody Book book) {
-        return this.iBookService.updateBook(idBook, book);
+        return this.bookService.updateBook(idBook, book);
     }
-
-
-
-
-
-
 
     @DeleteMapping("/{idBook}")
     public void deleteBookById(@PathVariable Integer idBook) {
-        this.iBookService.deleteBookById(idBook);
+        this.bookService.deleteBookById(idBook);
     }
 
     @GetMapping("/{idBook}")
     public Book getBookById(@PathVariable Integer idBook) {
-        return this.iBookService.findBookById(idBook);
+        return this.bookService.findBookById(idBook);
     }
-
-
-
-
-
-
 
     @GetMapping("/{nameBook}")
     public Book findBookByName(@PathVariable String nameBook) {
-        return this.iBookService.findBookByName(nameBook);
+        return this.bookService.findBookByName(nameBook);
     }
-
-
-
-
-
 
     @GetMapping("/")
     public List<Book> getBookList() {
-        return this.iBookService.findBookList();
+        return this.bookService.findBookList();
     }
+
+    //todo: Вывод книг оперделённого автора.
+    //todo: Вывод книг определённого жанра
+    //todo: сортировка книг по алфавиту/автору/жанру
+
+
+
 
     /*
     @GetMapping("/sort")

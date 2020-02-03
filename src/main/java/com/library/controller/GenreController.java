@@ -12,36 +12,37 @@ import java.util.List;
 public class GenreController {
 
     @Autowired
-    private IGenreService iGenreService;
+    private IGenreService genreService;
 
-    @PostMapping
-    public void createGenre(@RequestBody Genre genre) {
-        this.iGenreService.createGenre(genre);
+    @PostMapping("/")
+    public Genre createGenre(@RequestBody Genre genre) {
+        return this.genreService.createGenre(genre);
     }
 
     @PutMapping("/{idGenre}")
     public Genre updateGenre(@PathVariable Integer idGenre,
                                      @RequestBody Genre genre) {
-        return this.iGenreService.updateGenre(idGenre, genre);
+        return this.genreService.updateGenre(idGenre, genre);
     }
 
     @DeleteMapping("/{idGenre}")
-    public void deleteGenreById(@PathVariable Integer idGenre) {
-        this.iGenreService.deleteGenreById(idGenre);
+    public Genre deleteGenreById(@PathVariable Integer idGenre) {
+        return this.genreService.deleteGenreById(idGenre);
     }
 
     @GetMapping("/{idGenre}")
     public Genre getGenreById(@PathVariable Integer idGenre) {
-        return this.iGenreService.findGenreById(idGenre);
+        return this.genreService.findGenreById(idGenre);
     }
 
-    @GetMapping("/{nameGenre}")
+    //todo:
+    @GetMapping("/name/{nameGenre}")
     public Genre findGenreByName(@PathVariable String nameGenre) {
-        return this.iGenreService.findGenreByName(nameGenre);
+        return this.genreService.findGenreByName(nameGenre);
     }
 
     @GetMapping("/")
     public List<Genre> getGenreList() {
-        return this.iGenreService.findGenreList();
+        return this.genreService.findGenreList();
     }
 }

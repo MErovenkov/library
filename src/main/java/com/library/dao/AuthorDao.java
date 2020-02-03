@@ -4,6 +4,7 @@ import com.library.dao.interfaces.IAuthorDao;
 import com.library.model.Author;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -18,23 +19,17 @@ public class AuthorDao extends AbstractJpaDao<Author> implements IAuthorDao {
 
     @Override
     public Author findAuthorByFullName(Author author) {
-        //todo: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        return null;
-    }
-
-    @Override
-    public boolean duplicateCheck(Author author) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Author> criteriaQuery = criteriaBuilder.createQuery(Author.class);
         Root<Author> root = criteriaQuery.from(Author.class);
 
-        Predicate name = criteriaBuilder.like(root.get("name"), author.getName());
         Predicate surname = criteriaBuilder.like(root.get("surname"), author.getSurname());
+        Predicate name = criteriaBuilder.like(root.get("name"), author.getName());
         Predicate patronymic = criteriaBuilder.like(root.get("patronymic"), author.getPatronymic());
-//+ proverka na Ganre todo:
 
+        criteriaQuery.select(root)
+                .where(criteriaBuilder.and(surname, name, patronymic));
 
-        return criteriaQuery.select(root).where(criteriaBuilder
-                .and(name, surname, patronymic)) != null;
+        return entityManager.createQuery(criteriaQuery).getSingleResult();
     }
 }

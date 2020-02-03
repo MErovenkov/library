@@ -1,9 +1,15 @@
 package com.library.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "authority")
 public class Authority implements Serializable {
@@ -16,6 +22,7 @@ public class Authority implements Serializable {
     @Column(name = "name_authority")
     private String nameAuthority;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "authority", cascade = CascadeType.ALL)
     private Set<User> users;
 
@@ -23,30 +30,6 @@ public class Authority implements Serializable {
 
     public Authority(String nameAuthority, Set<User> users) {
         this.nameAuthority = nameAuthority;
-        this.users = users;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getNameAuthority() {
-        return nameAuthority;
-    }
-
-    public void setNameAuthority(String nameAuthority) {
-        this.nameAuthority = nameAuthority;
-    }
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
         this.users = users;
     }
 }

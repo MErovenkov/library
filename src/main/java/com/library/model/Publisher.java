@@ -1,6 +1,7 @@
 package com.library.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 import javax.persistence.*;
@@ -29,7 +30,7 @@ public class Publisher implements Serializable {
     @Column(name = "address")
     private String address;
 
-    @JsonIgnore
+    @JsonManagedReference
     @OneToMany(mappedBy = "publisher", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Book> bookList;
 

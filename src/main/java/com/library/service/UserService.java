@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
-
+/*
 @Service
 public class UserService implements IUserService, UserDetailsService {
 
@@ -61,4 +61,4 @@ public class UserService implements IUserService, UserDetailsService {
         System.out.println(user.getUsername() + "      " + user.getPassword() + "        " + grantedAuthorities);
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
     }
-}
+}*/

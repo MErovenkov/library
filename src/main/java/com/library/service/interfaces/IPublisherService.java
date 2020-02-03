@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface IPublisherService {
 
-    void createPublisher(Publisher publisher);
+    Publisher createPublisher(Publisher publisher);
 
     Publisher updatePublisher(Integer idPublisher, Publisher newDataPublisher);
 
-    void deletePublisherById(Integer idPublisher);
+    Publisher deletePublisherById(Integer idPublisher);
 
     Publisher findPublisherById(Integer idPublisher);
 

@@ -12,37 +12,47 @@ import java.util.List;
 public class AuthorController {
 
     @Autowired
-    private IAuthorService iAuthorService;
+    private IAuthorService authorService;
 
-    @PostMapping
-    public void createAuthor(@RequestBody Author author) {
-        this.iAuthorService.createAuthor(author);
+    @PostMapping("/")
+    public Author createAuthor(@RequestBody Author author) {
+         return this.authorService.createAuthor(author);
     }
 
     @PutMapping("/{idAuthor}")
     public Author updateAuthor(@PathVariable Integer idAuthor,
                              @RequestBody Author author) {
-        return this.iAuthorService.updateAuthor(idAuthor, author);
+        return this.authorService.updateAuthor(idAuthor, author);
+    }
+
+    //todo: подумать над тем, как лучше назвать запрос
+    @PutMapping("/{idAuthor}/add-genre")
+    public Author addGenreToAuthor(@PathVariable Integer idAuthor,
+                                   @RequestParam Integer idGenre) {
+        return this.authorService.addGenreToAuthor(idAuthor, idGenre);
     }
 
     @DeleteMapping("/{idAuthor}")
-    public void deleteAuthorById(@PathVariable Integer idAuthor) {
-        this.iAuthorService.deleteAuthorById(idAuthor);
+    public Author deleteAuthorById(@PathVariable Integer idAuthor) {
+        return this.authorService.deleteAuthorById(idAuthor);
     }
 
     @GetMapping("/{idAuthor}")
     public Author getAuthorById(@PathVariable Integer idAuthor) {
-        return this.iAuthorService.findAuthorById(idAuthor);
+        return this.authorService.findAuthorById(idAuthor);
     }
 
-    @GetMapping("/")
+    //todo: подумать над тем, как лучше назвать запрос
+    @GetMapping("/FullName")
     public Author findAuthorByFullName(@RequestBody Author author) {
-        return this.iAuthorService.findAuthorByFullName(author);
+        return this.authorService.findAuthorByFullName(author);
     }
 
     @GetMapping("/")
     public List<Author> getAuthorList() {
-        return this.iAuthorService.findAuthorList();
+        return this.authorService.findAuthorList();
     }
+
+
 
 }

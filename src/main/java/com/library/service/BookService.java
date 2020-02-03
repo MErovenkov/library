@@ -12,7 +12,7 @@ import java.util.List;
 public class BookService implements IBookService {
 
     @Autowired
-    private IBookDao iBookDao;
+    private IBookDao bookDao;
 
     @Override
     public void createBook(Book book) {
@@ -36,7 +36,7 @@ public class BookService implements IBookService {
         } else {
             //NULL
         }*/
-           this.iBookDao.create(book);
+           this.bookDao.create(book);
     }
 
 
@@ -46,11 +46,11 @@ public class BookService implements IBookService {
 
         // todo: проверка на наличие
 
-        Book book = this.iBookDao.findOneById(idBook);
+        Book book = this.bookDao.findOneById(idBook);
 
 
 
-        return this.iBookDao.update(book);
+        return this.bookDao.update(book);
     }
 
 
@@ -59,15 +59,15 @@ public class BookService implements IBookService {
     @Override
     public void deleteBookById(Integer idBook) {
         ///
-        this.iBookDao.deleteById(idBook);
+        this.bookDao.deleteById(idBook);
     }
 
     @Override
     public Book findBookById(Integer idBook) {
-        if(this.iBookDao.findOneById(idBook) == null) {
+        if(this.bookDao.findOneById(idBook) == null) {
             ///
             return null;
-        } else return this.iBookDao.findOneById(idBook);
+        } else return this.bookDao.findOneById(idBook);
     }
 
 
@@ -80,7 +80,7 @@ public class BookService implements IBookService {
 
         // todo: проверка на наличие
 
-        return this.iBookDao.findBookByName(nameBook);
+        return this.bookDao.findBookByName(nameBook);
     }
 
 
@@ -90,10 +90,10 @@ public class BookService implements IBookService {
 
     @Override
     public List<Book> findBookList() {
-        if(this.iBookDao.findAll() == null) {
+        if(this.bookDao.findAll() == null) {
             ///
             return null;
-        } else return this.iBookDao.findAll();
+        } else return this.bookDao.findAll();
 
     }
 
