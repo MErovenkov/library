@@ -16,5 +16,5 @@ public interface IGenreService {
 
     Genre findGenreByName(String nameGenre);
 
-    List<Genre> findGenreList();
+    List<Genre> findGenresList();
 }

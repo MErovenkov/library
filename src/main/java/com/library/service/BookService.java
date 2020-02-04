@@ -1,107 +1,166 @@
 package com.library.service;
 
+import com.library.dao.interfaces.IAuthorDao;
 import com.library.dao.interfaces.IBookDao;
+import com.library.dao.interfaces.IGenreDao;
 import com.library.model.*;
+import com.library.model.enums.SortingComparator;
 import com.library.service.interfaces.IBookService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceException;
 import java.util.List;
 
+//todo: описание, логирование исключений, сообщения на сторону клиента. сортировка
+/**
+ *
+ * */
+@Slf4j
 @Service
 public class BookService implements IBookService {
 
     @Autowired
+    private IAuthorDao authorDao;
+
+    @Autowired
     private IBookDao bookDao;
 
+    @Autowired
+    private IGenreDao genreDao;
+
     @Override
-    public void createBook(Book book) {
-       // if (book != null) {
-           /* if (book.getName().trim().equals(""))
-            {
-                //книга без названия
-            } else if (book.getAuthor() == null) {
-                // без автора
-            } else if (book.getGenre() == null) {
-                /// bez ganra
-            } else if (book.getPublishing() == null) {
-                //bez publix
-            }  else if (book.getNumberPages() == null) {
+    public Book createBook(Book book) {
+        try {
+            if (book != null) {
+                if (validationCheck(book)) {
+                    return this.bookDao.create(book);
+                }
+            } else {
+                log.warn("");
+            }
+        } catch (PersistenceException e) {
+            //TODO: 03.02.2020 повторяющееся значение ключа нарушает ограничение уникальности
+        }
 
-            } else if (book.getBookCase() == null) {
-
-            } else if (book.getNumberPlace() == null) {
-
-            } else this.iBookDao.create(book);
-        } else {
-            //NULL
-        }*/
-           this.bookDao.create(book);
+        return null;
     }
-
 
 
     @Override
     public Book updateBook(Integer idBook, Book newDataBook) {
+        if (validationCheck(newDataBook)) {
+            Book book = this.bookDao.findOneById(idBook);
 
-        // todo: проверка на наличие
+            if (book != null) {
+                book.setName(newDataBook.getName());
+                book.setAuthor(newDataBook.getAuthor());
+                book.setGenre(newDataBook.getGenre());
+                book.setNumberPages(newDataBook.getNumberPages());
+                book.setShortSpecification(newDataBook.getShortSpecification());
 
-        Book book = this.bookDao.findOneById(idBook);
+                return this.bookDao.update(book);
+            } else {
+                log.warn("");
+                //todo:http....
+            }
+        }
 
-
-
-        return this.bookDao.update(book);
+        return null;
     }
 
 
+    private boolean validationCheck(Book book) {
+
+        boolean validate = false;
+
+        if (!book.getName().trim().equals("") || book.getName() != null) {
+            if (book.getAuthor() != null) {
+                if (book.getGenre() != null) {
+                    if (book.getPublisher() != null) {
+                        if (book.getShortSpecification() != null) {
+                            if (book.getNumberPages() != null) {
+                                validate = true;
+                            } else {
+                                log.warn("sdas");
+                                //todo: http,,,,
+                            }
+                        } else {
+                            log.warn("sdas");
+                            //todo: http,,,,
+                        }
+                    } else {
+                        log.warn("sdas");
+                        //todo: http,,,,
+                    }
+                } else {
+                    log.warn("sdas");
+                    //todo: http,,,,
+                }
+            } else {
+                log.warn("sdas");
+                //todo: http,,,,
+            }
+        } else {
+            log.warn("sdas");
+            //todo: http,,,,
+        }
+
+        return validate;
+    }
 
 
     @Override
-    public void deleteBookById(Integer idBook) {
-        ///
-        this.bookDao.deleteById(idBook);
+    public Book deleteBookById(Integer idBook) {
+        Book book = this.bookDao.findOneById(idBook);
+
+        if (book != null) {
+            return this.bookDao.deleteById(idBook);
+        } else  {
+            log.warn("Книги с таким id не существует");
+            //TODO: http...
+        }
+
+        return null;
     }
+
 
     @Override
     public Book findBookById(Integer idBook) {
-        if(this.bookDao.findOneById(idBook) == null) {
-            ///
-            return null;
-        } else return this.bookDao.findOneById(idBook);
+        return this.bookDao.findOneById(idBook);
     }
 
-
-
-
-
-    // todo: возможно стоит убрать
     @Override
     public Book findBookByName(String nameBook) {
+        try {
+            return this.bookDao.findBookByName(nameBook);
+        } catch (NoResultException e) {
+            log.error("Запрос на поиск по имени: " + nameBook
+                    + " не выполнен, т.к.такого книги не существует", e);
 
-        // todo: проверка на наличие
-
-        return this.bookDao.findBookByName(nameBook);
-    }
-
-
-
-
-
-
-    @Override
-    public List<Book> findBookList() {
-        if(this.bookDao.findAll() == null) {
-            ///
+            // TODO: 02.02.2020 выбросить фронт exception
             return null;
-        } else return this.bookDao.findAll();
-
+        }
     }
 
-    /*
-    @Override
-    public void removingBookByName(String nameBook) {
-        if(this.iBookDao.findOneById(idBook) == null) {
 
-        } else this.iBookDao.deleteById(idBook);
-    }*/
+    public List<Book> findBooksByAuthor(Integer idAuthor) {
+        return this.authorDao.findOneById(idAuthor).getBookList();
+    }
+
+    public List<Book> findBooksByGenre(Integer idGenre) {
+        return this.genreDao.findOneById(idGenre).getBookList();
+    }
+
+    @Override
+    public List<Book> findBooksList() {
+        return this.bookDao.findAll();
+    }
+
+    //todo:
+    public List<Book> findSortBooksList(SortingComparator sortingComparator) {
+        return this.bookDao.findSortBooksList(sortingComparator);
+    }
 }

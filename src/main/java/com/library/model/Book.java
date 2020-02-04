@@ -1,6 +1,5 @@
 package com.library.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -20,17 +19,18 @@ public class Book implements Serializable {
     @Column(name = "name")
     private String name;
 
+    @JsonManagedReference
     @ManyToOne
-    @JsonBackReference
     @JoinColumn(name = "id_author")
     private Author author;
 
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "id_genre")
     private Genre genre;
 
+    @JsonManagedReference
     @ManyToOne
-    @JsonBackReference
     @JoinColumn(name = "id_publisher")
     private Publisher publisher;
 
@@ -43,20 +43,20 @@ public class Book implements Serializable {
     @Column(name = "in_stock")
     private boolean inStock;
 
-    @JsonManagedReference
+    @JsonIgnore
     @OneToMany(mappedBy = "book")
     private List<Entry> entry;
 
     private Book(){}
 
-    public Book(String name, Author author, Genre genre, Publisher publisher, String shortSpecification, Integer numberPages, boolean inStock) {
+    public Book(String name, Author author, Genre genre, Publisher publisher, String shortSpecification, Integer numberPages) {
         this.name = name;
         this.author = author;
         this.genre = genre;
         this.publisher = publisher;
         this.shortSpecification = shortSpecification;
         this.numberPages = numberPages;
-        this.inStock = inStock;
+        this.inStock = true;
     }
 
     public Integer getId() {
@@ -115,12 +115,12 @@ public class Book implements Serializable {
         this.genre = genre;
     }
 
-    public Publisher getPublishing() {
+    public Publisher getPublisher() {
         return publisher;
     }
 
-    public void setPublishing(Publisher publishing) {
-        this.publisher = publishing;
+    public void setPublisher(Publisher publisher) {
+        this.publisher = publisher;
     }
 
     public List<Entry> getEntry() {

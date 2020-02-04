@@ -1,8 +1,13 @@
 package com.library.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.List;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "reader_card")
 public class ReaderCard extends Person {
@@ -21,6 +26,9 @@ public class ReaderCard extends Person {
     @Column(name = "penalty")
     private Integer penalty;
 
+    @Column(name = "max_books_taken")
+    private Integer maxBooksTaken;
+
     @OneToMany(mappedBy = "readerCard")
     private List<Entry> entryList;
 
@@ -35,6 +43,7 @@ public class ReaderCard extends Person {
         this.numberPhone = numberPhone;
         this.email = email;
         this.penalty = 0;
+        this.maxBooksTaken = 3;
     }
 
     public ReaderCard(String surname, String name, String patronymic, Integer numberPhone) {
@@ -42,53 +51,6 @@ public class ReaderCard extends Person {
         this.numberPhone = numberPhone;
         this.email = null;
         this.penalty = 0;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getNumberPhone() {
-        return numberPhone;
-    }
-
-    public void setNumberPhone(Integer numberPhone) {
-        this.numberPhone = numberPhone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Integer getPenalty() {
-        return penalty;
-    }
-
-    public void setPenalty(Integer penalty) {
-        this.penalty = penalty;
-    }
-
-    public List<Entry> getEntryList() {
-        return entryList;
-    }
-
-    public void setEntryList(List<Entry> entryList) {
-        this.entryList = entryList;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
+        this.maxBooksTaken = 3;
     }
 }

@@ -16,5 +16,5 @@ public interface IPublisherService {
 
     Publisher findPublisherByName(String namePublisher);
 
-    List<Publisher> findPublisherList();
+    List<Publisher> findPublishersList();
 }

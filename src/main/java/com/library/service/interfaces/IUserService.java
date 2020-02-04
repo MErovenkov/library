@@ -4,7 +4,11 @@ import com.library.model.User;
 
 public interface IUserService {
 
-    void addUser(User user);
+    User createUser(User user);
+
+    User updateUser(Integer idUser, User user);
+
+    User deleteUserById(Integer idUser);
 
     User findByUsername(String username);
 }

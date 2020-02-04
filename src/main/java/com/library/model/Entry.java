@@ -1,6 +1,7 @@
 package com.library.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.library.model.enums.EntryStatus;
 
@@ -22,8 +23,8 @@ public class Entry implements Serializable {
     @JoinColumn(name = "id_reader_card")
     private ReaderCard readerCard;
 
+    @JsonIgnore
     @ManyToOne
-    @JsonBackReference
     @JoinColumn(name = "id_book")
     private Book book;
 

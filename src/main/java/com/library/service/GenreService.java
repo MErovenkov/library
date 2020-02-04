@@ -13,6 +13,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import java.util.List;
 
+//todo: описание, логирование исключений, сообщения на сторону клиента
 //TODO: 03.02.2020
 /**
  *
@@ -81,17 +82,17 @@ public class GenreService implements IGenreService {
     @Override
     public Genre updateGenre(Integer idGenre, Genre newDataGenre) {
         try {
-            Genre genre = this.genreDao.findOneById(idGenre);
+            if(validationCheck(newDataGenre)) {
+                Genre genre = this.genreDao.findOneById(idGenre);
 
-            if (genre != null) {
-                if(validationCheck(newDataGenre)) {
+                if (genre != null) {
                     genre.setName(NamingFormatter.getInstance().formatForName(newDataGenre.getName()));
 
                     return this.genreDao.update(genre);
+                } else {
+                    log.warn("Жанр с таким id не возможно изменить т.к. его не существует");
+                    //TODO: 02.02.2020 выбросить фронт exception
                 }
-            } else {
-                log.warn("Жанр с таким id не возможно изменить т.к. его не существует");
-                //TODO: 02.02.2020 выбросить фронт exception
             }
         } catch (DataIntegrityViolationException e) {
             //TODO: 02.02.2020 ОШИБКА: повторяющееся значение ключа нарушает ограничение уникальности "genre_name_key"
@@ -197,7 +198,7 @@ public class GenreService implements IGenreService {
      *
      * */
     @Override
-    public List<Genre> findGenreList() {
+    public List<Genre> findGenresList() {
         return this.genreDao.findAll();
     }
 }

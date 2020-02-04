@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
-/*
+
 @Service
 public class UserService implements IUserService, UserDetailsService {
 
@@ -28,18 +28,6 @@ public class UserService implements IUserService, UserDetailsService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    ///
-    @Override
-    public void addUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Set<Authority> authorities = new HashSet<>();
-
-        authorities.add(authorityDao.findOneById(1));
-        user.setAuthority(authorities);
-
-        userDao.create(user);
-    }
 
     @Override
     public User findByUsername(String username) {
@@ -61,4 +49,19 @@ public class UserService implements IUserService, UserDetailsService {
         System.out.println(user.getUsername() + "      " + user.getPassword() + "        " + grantedAuthorities);
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
     }
-}*/
+
+    @Override
+    public User createUser(User user) {
+        return null;
+    }
+
+    @Override
+    public User updateUser(Integer idUser, User user) {
+        return null;
+    }
+
+    @Override
+    public User deleteUserById(Integer idUser) {
+        return null;
+    }
+}

@@ -14,7 +14,7 @@ public class AuthorController {
     @Autowired
     private IAuthorService authorService;
 
-    @PostMapping("/")
+    @PostMapping
     public Author createAuthor(@RequestBody Author author) {
          return this.authorService.createAuthor(author);
     }
@@ -50,7 +50,8 @@ public class AuthorController {
 
     @GetMapping("/")
     public List<Author> getAuthorList() {
-        return this.authorService.findAuthorList();
+        List<Author> authorsList = this.authorService.findAuthorsList();
+        return authorsList;
     }
 
 

@@ -1,10 +1,10 @@
 package com.library.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -30,11 +30,11 @@ public class Genre implements Serializable {
     private String name;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "genreList", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "genreList", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Author> authorList;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "genre", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonBackReference
+    @OneToMany(mappedBy = "genre", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Book> bookList;
 
     private Genre(){}

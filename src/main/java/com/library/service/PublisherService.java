@@ -11,6 +11,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import java.util.List;
 
+//todo: описание, логирование исключений, сообщения на сторону клиента
 //TODO: 03.02.2020
 /**
  *
@@ -53,14 +54,14 @@ public class PublisherService implements IPublisherService {
     @Override
     public Publisher updatePublisher(Integer idPublisher, Publisher newDataPublisher) {
         try {
-            Publisher publisher = this.publisherDao.findOneById(idPublisher);
+            if (validationCheck(newDataPublisher)) {
+                Publisher publisher = this.publisherDao.findOneById(idPublisher);
 
-            if(publisher != null) {
-                if (validationCheck(newDataPublisher)) {
+                if (publisher != null) {
                     publisher.setName(newDataPublisher.getName());
                     publisher.setAddress(newDataPublisher.getAddress());
 
-                    return this.publisherDao.update(newDataPublisher);
+                    return this.publisherDao.update(publisher);
                 } else {
                     log.warn("Издателя с таким id не возможно изменить т.к. его не существует");
                     //TODO: 02.02.2020 выбросить фронт exception
@@ -148,7 +149,7 @@ public class PublisherService implements IPublisherService {
      *
      * */
     @Override
-    public List<Publisher> findPublisherList() {
+    public List<Publisher> findPublishersList() {
         return this.publisherDao.findAll();
     }
 }

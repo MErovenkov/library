@@ -42,8 +42,8 @@ public class PublisherController {
     }
 
     @GetMapping("/")
-    public List<Publisher> getPublisherList() {
-        return this.publisherService.findPublisherList();
+    public List<Publisher> findPublishersList() {
+        return this.publisherService.findPublishersList();
     }
 
 }

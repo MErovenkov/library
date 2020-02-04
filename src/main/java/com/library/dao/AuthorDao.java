@@ -32,4 +32,6 @@ public class AuthorDao extends AbstractJpaDao<Author> implements IAuthorDao {
 
         return entityManager.createQuery(criteriaQuery).getSingleResult();
     }
+
+
 }

@@ -15,7 +15,7 @@ public interface IAuthorService {
 
     Author findAuthorByFullName(Author author);
 
-    List<Author> findAuthorList();
+    List<Author> findAuthorsList();
 
     Author addGenreToAuthor(Integer idAuthor, Integer idGenre);
 }

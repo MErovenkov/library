@@ -16,6 +16,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import java.util.List;
 
+//todo: описание, логирование исключений, сообщения на сторону клиента, транзакция
 //TODO: 03.02.2020
 /**
  *
@@ -30,6 +31,7 @@ public class AuthorService implements IAuthorService {
     @Autowired
     private IGenreDao genreDao;
 
+
     //TODO: 03.02.2020
     /**
      *  Функция
@@ -37,23 +39,16 @@ public class AuthorService implements IAuthorService {
      * */
     @Override
     public Author createAuthor(Author author) {
-        return this.authorDao.create(author);
-      /*  try {
+        try {
             if (author != null) {
                 if (validationFullNameCheck(author)) {
-                    if (author.getGenreList() != null) {
-                        return this.authorDao.create(author);
-                    } else {
-                        log.warn("У автора дожлен быть хотя бы 1 жанр");
-                        //TODO: 03.02.2020 выбросить фронт exception
-                    }
+                    return this.authorDao.create(author);
                 }
             }
         } catch (PersistenceException e) {
             //TODO: 03.02.2020 повторяющееся значение ключа нарушает ограничение уникальности
         }
-
-        return null;*/
+        return null;
     }
 
     //TODO: 03.02.2020
@@ -64,10 +59,10 @@ public class AuthorService implements IAuthorService {
     @Override
     public Author updateAuthor(Integer idAuthor, Author newDataAuthor) {
         try {
-            Author author = this.authorDao.findOneById(idAuthor);
+            if (validationFullNameCheck(newDataAuthor)) {
+                Author author = this.authorDao.findOneById(idAuthor);
 
-            if (author != null) {
-                if (validationFullNameCheck(newDataAuthor)) {
+                if (author != null) {
                     newDataAuthor = (Author) NamingFormatter.getInstance().formatFullName(newDataAuthor);
 
                     author.setSurname(newDataAuthor.getSurname());
@@ -75,10 +70,10 @@ public class AuthorService implements IAuthorService {
                     author.setPatronymic(newDataAuthor.getPatronymic());
 
                     return this.authorDao.update(author);
-                }
-            } else {
+                } else {
                     log.warn("Автора с таким id не возможно изменить т.к. его не существует");
                     //TODO: 03.02.2020 выбросить фронт exception
+                }
             }
         } catch (DataIntegrityViolationException e) {
             //TODO: 03.02.2020 ОШИБКА: повторяющееся значение ключа нарушает ограничение уникальности
@@ -173,7 +168,7 @@ public class AuthorService implements IAuthorService {
      *
      * */
     @Override
-    public List<Author> findAuthorList() {
+    public List<Author> findAuthorsList() {
         return this.authorDao.findAll();
     }
 
@@ -182,12 +177,13 @@ public class AuthorService implements IAuthorService {
      *  Функция
      *
      * */
+//////////////////////////////////////////////////
     public Author addGenreToAuthor(Integer idAuthor, Integer idGenre) {
         Genre genre = this.genreDao.findOneById(idGenre);
         Author author = this.authorDao.findOneById(idAuthor);
-
         if (genre != null && author != null) {
             author.getGenreList().add(genre);
+            System.out.println(author.getGenreList());
 
             return this.authorDao.update(author);
         } else {

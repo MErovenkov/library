@@ -1,6 +1,9 @@
 package com.library.controller;
 
+import com.library.model.Author;
 import com.library.model.Book;
+import com.library.model.Genre;
+import com.library.model.enums.SortingComparator;
 import com.library.service.interfaces.IBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +18,8 @@ public class BookController {
     private IBookService bookService;
 
     @PostMapping("/")
-    public void createBook(@RequestBody Book book) {
-        this.bookService.createBook(book);
+    public Book createBook(@RequestBody Book book) {
+        return this.bookService.createBook(book);
     }
 
     @PutMapping("/{idBook}")
@@ -26,12 +29,12 @@ public class BookController {
     }
 
     @DeleteMapping("/{idBook}")
-    public void deleteBookById(@PathVariable Integer idBook) {
-        this.bookService.deleteBookById(idBook);
+    public Book deleteBookById(@PathVariable Integer idBook) {
+        return this.bookService.deleteBookById(idBook);
     }
 
     @GetMapping("/{idBook}")
-    public Book getBookById(@PathVariable Integer idBook) {
+    public Book findBookById(@PathVariable Integer idBook) {
         return this.bookService.findBookById(idBook);
     }
 
@@ -40,13 +43,28 @@ public class BookController {
         return this.bookService.findBookByName(nameBook);
     }
 
-    @GetMapping("/")
-    public List<Book> getBookList() {
-        return this.bookService.findBookList();
+    //todo:
+    @GetMapping("/findBooksByAuthor")
+    public List<Book> findBooksByAuthor(@RequestParam Integer idAuthor) {
+        return this.bookService.findBooksByAuthor(idAuthor);
     }
 
-    //todo: Вывод книг оперделённого автора.
-    //todo: Вывод книг определённого жанра
+    //todo:
+    @GetMapping("/findBooksByGenre/{idGenre}")
+    public List<Book> findBooksByGenre(@PathVariable Integer idGenre) {
+        return this.bookService.findBooksByGenre(idGenre);
+    }
+
+    @GetMapping("/")
+    public List<Book> findBooksList() {
+        return this.bookService.findBooksList();
+    }
+
+    //todo: имя компоратора
+    public List<Book> findSortBooksList(SortingComparator sortingComparator) {
+        return this.bookService.findSortBooksList(sortingComparator);
+    }
+
     //todo: сортировка книг по алфавиту/автору/жанру
 
 
@@ -60,6 +78,4 @@ public class BookController {
 
     }*/
 
-
-    /// сортировки + update
 }

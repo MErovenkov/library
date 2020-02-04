@@ -42,6 +42,8 @@ short_specification varchar(255),
 number_pages int NOT NULL,
 in_stock bit NOT NULL,
 
+UNIQUE(name),
+
 FOREIGN KEY(id_author) REFERENCES author(id_author),
 FOREIGN KEY(id_genre) REFERENCES genre(id_genre),
 FOREIGN KEY(id_publisher) REFERENCES publisher(id_publisher)
@@ -49,13 +51,17 @@ FOREIGN KEY(id_publisher) REFERENCES publisher(id_publisher)
 
 CREATE TABLE IF NOT EXISTS authority(
 id_authority int PRIMARY KEY NOT NULL,
-role varchar(255) NOT NULL
+name varchar(255) NOT NULL,
+
+UNIQUE(name)
 );
 
 CREATE TABLE IF NOT EXISTS users(
 id_user int PRIMARY KEY NOT NULL,
 username varchar(255) NOT NULL,
-password varchar(255) NOT NULL
+password varchar(255) NOT NULL,
+
+UNIQUE(username)
 );
 
 CREATE TABLE IF NOT EXISTS users_authority(
@@ -76,7 +82,7 @@ patronymic varchar(255),
 number_phone int NOT NULL,
 email varchar(255) UNIQUE,
 penalty int NOT NULL,
-reader_card_status varchar(255) NOT NULL,
+max_books_taken int NOT NULL,
 
 FOREIGN KEY(id_reader_card) REFERENCES users(id_user)
 );

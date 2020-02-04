@@ -31,7 +31,7 @@ public class GenreController {
     }
 
     @GetMapping("/{idGenre}")
-    public Genre getGenreById(@PathVariable Integer idGenre) {
+    public Genre findGenreById(@PathVariable Integer idGenre) {
         return this.genreService.findGenreById(idGenre);
     }
 
@@ -42,7 +42,7 @@ public class GenreController {
     }
 
     @GetMapping("/")
-    public List<Genre> getGenreList() {
-        return this.genreService.findGenreList();
+    public List<Genre> findGenresList() {
+        return this.genreService.findGenresList();
     }
 }

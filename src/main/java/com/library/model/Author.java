@@ -1,13 +1,12 @@
 package com.library.model;
 
 import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
 
 @Getter
@@ -21,15 +20,16 @@ public class Author extends Person implements Serializable {
     @Column(name = "id_author")
     private Integer id;
 
-    @ManyToMany
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "author_genre",
-            joinColumns =  @JoinColumn(name = "id_author"),
-            inverseJoinColumns =  @JoinColumn(name = "id_genre"))
+            joinColumns =  @JoinColumn(name = "id_genre"),
+            inverseJoinColumns =  @JoinColumn(name = "id_author"))
     private List<Genre> genreList;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Book> bookList;
 
     private Author(){
