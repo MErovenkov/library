@@ -15,12 +15,12 @@ public class EntryDao extends AbstractJpaDao<Entry> implements IEntryDao {
     }
 
     @Override
-    public List<Entry> findEntriesByReaderCard(Integer idReaderCard) {
+    public Entry closedEntryById(Integer idEntry) {
         return null;
     }
 
     @Override
-    public List<Entry> findSortEntriesList(SortingComparator sortingComparator) {
+    public List<Entry> findExpiredEntriesList() {
         return null;
     }
 }

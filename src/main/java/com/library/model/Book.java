@@ -47,7 +47,7 @@ public class Book implements Serializable {
     @OneToMany(mappedBy = "book")
     private List<Entry> entry;
 
-    private Book(){}
+    public Book(){}
 
     public Book(String name, Author author, Genre genre, Publisher publisher, String shortSpecification, Integer numberPages) {
         this.name = name;

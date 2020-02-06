@@ -5,6 +5,7 @@ import com.library.dao.interfaces.IGenreDao;
 import com.library.model.Author;
 
 import com.library.model.Genre;
+import com.library.model.enums.SortingComparator;
 import com.library.service.interfaces.IAuthorService;
 import com.library.utils.NamingFormatter;
 import lombok.extern.slf4j.Slf4j;
@@ -17,10 +18,12 @@ import javax.persistence.PersistenceException;
 import java.util.List;
 
 //todo: описание, логирование исключений, сообщения на сторону клиента, транзакция
-//TODO: 03.02.2020
+//todo: не работает добавление новых жанров автору
+//TODO: 05.02.2020
 /**
  *
  * */
+
 @Slf4j
 @Service
 public class AuthorService implements IAuthorService {
@@ -48,8 +51,11 @@ public class AuthorService implements IAuthorService {
         } catch (PersistenceException e) {
             //TODO: 03.02.2020 повторяющееся значение ключа нарушает ограничение уникальности
         }
+
         return null;
     }
+
+
 
     //TODO: 03.02.2020
     /**
@@ -118,6 +124,30 @@ public class AuthorService implements IAuthorService {
         return validate;
     }
 
+    //TODO:
+    /**
+     *  Функция
+     *
+     * */
+    public Author addGenreToAuthor(Integer idAuthor, Integer idGenre) {
+        Author author = this.authorDao.findOneById(idAuthor);
+        this.authorDao.findGenreListByAuthor(author);
+
+
+        Genre genre = this.genreDao.findOneById(idGenre);
+
+        if (genre != null && author != null) {
+
+
+            return this.authorDao.update(author);
+        } else {
+            log.warn("!");
+            //TODO: 03.02.2020 выбросить фронт exception
+        }
+
+        return null;
+    }
+
     //TODO: 03.02.2020
     /**
      *  Функция
@@ -144,6 +174,8 @@ public class AuthorService implements IAuthorService {
      * */
     @Override
     public Author findAuthorById(Integer idAuthor) {
+        Author author = this.authorDao.findOneById(idAuthor);
+
         return this.authorDao.findOneById(idAuthor);
     }
 
@@ -154,9 +186,9 @@ public class AuthorService implements IAuthorService {
      * */
     // todo: need test
     @Override
-    public Author findAuthorByFullName(Author author) {
+    public Author findAuthorByFullName(String surnameSearch, String nameSearch, String patronymicSearch) {
         try {
-            return this.authorDao.findAuthorByFullName(author);
+            return this.authorDao.findByFullName(surnameSearch, nameSearch, patronymicSearch);
         } catch (NoResultException e) {
             return null;
         }
@@ -172,26 +204,15 @@ public class AuthorService implements IAuthorService {
         return this.authorDao.findAll();
     }
 
-    //TODO: 03.02.2020
-    /**
-     *  Функция
-     *
-     * */
-//////////////////////////////////////////////////
-    public Author addGenreToAuthor(Integer idAuthor, Integer idGenre) {
-        Genre genre = this.genreDao.findOneById(idGenre);
-        Author author = this.authorDao.findOneById(idAuthor);
-        if (genre != null && author != null) {
-            author.getGenreList().add(genre);
-            System.out.println(author.getGenreList());
 
-            return this.authorDao.update(author);
-        } else {
-            log.warn("!");
-            //TODO: 03.02.2020 выбросить фронт exception
-        }
+    public List<Author> findAuthorsByGenre(Genre genre){
 
-        return null;
+
+        return this.authorDao.findAuthorsListByGenre(genre);
+    }
+
+    public List<Author> findSortAuthorsList(SortingComparator sortingComparator) {
+        return this.authorDao.findSortAll(sortingComparator);
     }
 
 }

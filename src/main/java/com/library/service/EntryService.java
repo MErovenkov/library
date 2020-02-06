@@ -30,6 +30,11 @@ public class EntryService implements IEntryService {
     }
 
     @Override
+    public Entry closedEntryById(Integer idEntry) {
+        return this.entryDao.closedEntryById(idEntry);
+    }
+
+    @Override
     public Entry deleteEntryById(Integer idEntry) {
         return null;
     }
@@ -40,12 +45,13 @@ public class EntryService implements IEntryService {
     }
 
     @Override
-    public List<Entry> findEntriesByReaderCard(Integer idReaderCard) {
-        return null;
+    public List<Entry> findExpiredEntriesList() {
+        return this.entryDao.findExpiredEntriesList();
     }
 
     @Override
     public List<Entry> findEntriesList() {
+
         return null;
     }
 

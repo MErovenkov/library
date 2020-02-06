@@ -15,11 +15,6 @@ public class ReaderCardDao extends AbstractJpaDao<ReaderCard> implements IReader
     }
 
     @Override
-    public ReaderCard findReaderCardByFullName(ReaderCard readerCard) {
-        return null;
-    }
-
-    @Override
     public List<ReaderCard> findSortReadersCardsList(SortingComparator sortingComparator) {
         return null;
     }

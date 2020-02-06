@@ -5,9 +5,7 @@ import com.library.model.enums.SortingComparator;
 
 import java.util.List;
 
-public interface IReaderCardDao extends IGenericDao<ReaderCard> {
-
-    ReaderCard findReaderCardByFullName(ReaderCard readerCard);
+public interface IReaderCardDao extends IGenericDao<ReaderCard>, ISearchingByFullName<ReaderCard> {
 
     List<ReaderCard> findSortReadersCardsList(SortingComparator sortingComparator);
 }

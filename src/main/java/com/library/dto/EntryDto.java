@@ -1,0 +1,28 @@
+package com.library.dto;
+
+import com.library.model.Book;
+import com.library.model.ReaderCard;
+import com.library.model.enums.EntryStatus;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDate;
+
+@Getter
+@Setter
+public class EntryDto {
+
+    private Integer id;
+
+    private ReaderCard readerCard;
+
+    private Book book;
+
+    private LocalDate takeDate;
+
+    private LocalDate returnDatePlanned;
+
+    private LocalDate returnDate;
+
+    private EntryStatus entryStatus;
+}

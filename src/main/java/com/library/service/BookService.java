@@ -135,7 +135,7 @@ public class BookService implements IBookService {
     @Override
     public Book findBookByName(String nameBook) {
         try {
-            return this.bookDao.findBookByName(nameBook);
+            return this.bookDao.findByName(nameBook);
         } catch (NoResultException e) {
             log.error("Запрос на поиск по имени: " + nameBook
                     + " не выполнен, т.к.такого книги не существует", e);
@@ -145,11 +145,12 @@ public class BookService implements IBookService {
         }
     }
 
-
+//todo:
     public List<Book> findBooksByAuthor(Integer idAuthor) {
         return this.authorDao.findOneById(idAuthor).getBookList();
     }
 
+    //todo:
     public List<Book> findBooksByGenre(Integer idGenre) {
         return this.genreDao.findOneById(idGenre).getBookList();
     }
@@ -161,6 +162,6 @@ public class BookService implements IBookService {
 
     //todo:
     public List<Book> findSortBooksList(SortingComparator sortingComparator) {
-        return this.bookDao.findSortBooksList(sortingComparator);
+        return this.bookDao.findSortAll(sortingComparator);
     }
 }

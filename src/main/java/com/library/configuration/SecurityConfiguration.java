@@ -27,6 +27,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
 
+
+//todo: hasAnyRole
+
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()

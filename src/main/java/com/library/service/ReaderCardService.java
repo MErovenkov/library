@@ -1,6 +1,7 @@
 package com.library.service;
 
 import com.library.dao.interfaces.IReaderCardDao;
+import com.library.model.Entry;
 import com.library.model.ReaderCard;
 import com.library.model.enums.SortingComparator;
 import com.library.service.interfaces.IReaderCardService;
@@ -18,17 +19,7 @@ public class ReaderCardService implements IReaderCardService {
     private IReaderCardDao readerCardDao;
 
     @Override
-    public ReaderCard createReaderCard(ReaderCard readerCard) {
-        return null;
-    }
-
-    @Override
     public ReaderCard updateReaderCard(Integer idReaderCard, ReaderCard newDataReaderCard) {
-        return null;
-    }
-
-    @Override
-    public ReaderCard deleteReaderCardById(Integer idReaderCard) {
         return null;
     }
 
@@ -38,8 +29,8 @@ public class ReaderCardService implements IReaderCardService {
     }
 
     @Override
-    public ReaderCard findReaderCardByFullName(ReaderCard readerCard) {
-        return null;
+    public ReaderCard findReaderCardByFullName(String surnameSearch, String nameSearch, String patronymicSearch) {
+            return null;
     }
 
     @Override
@@ -49,6 +40,11 @@ public class ReaderCardService implements IReaderCardService {
 
     @Override
     public List<ReaderCard> findSortReadersCardsList(SortingComparator sortingComparator) {
+        return null;
+    }
+
+    @Override
+    public List<Entry> findEntriesByReaderCard(Integer idReaderCard) {
         return null;
     }
 }

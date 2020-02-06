@@ -21,18 +21,14 @@ public class Author extends Person implements Serializable {
     private Integer id;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "author_genre",
-            joinColumns =  @JoinColumn(name = "id_genre"),
-            inverseJoinColumns =  @JoinColumn(name = "id_author"))
-    private List<Genre> genreList;
+    @OneToMany(mappedBy = "author")
+    private List<AuthorGenre> authorGenre;
 
     @JsonBackReference
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     private List<Book> bookList;
 
-    private Author(){
+    public Author(){
         super();
     }
 

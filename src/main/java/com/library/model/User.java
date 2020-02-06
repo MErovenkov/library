@@ -35,7 +35,7 @@ public class User implements Serializable, UserDetails {
             inverseJoinColumns = @JoinColumn(name = "id_authority"))
     private Set<Authority> authority;
 
-    private User(){}
+    public User(){}
 
     public User(String userName, String password, ReaderCard readerCard, Set<Authority> authority) {
         this.userName = userName;

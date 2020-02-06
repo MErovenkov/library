@@ -1,6 +1,8 @@
 package com.library.controller;
 
-import com.library.model.Author;
+import com.library.dto.AuthorDto;
+import com.library.mapper.AuthorMapper;
+import com.library.model.Genre;
 import com.library.service.interfaces.IAuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,46 +16,79 @@ public class AuthorController {
     @Autowired
     private IAuthorService authorService;
 
-    @PostMapping
-    public Author createAuthor(@RequestBody Author author) {
-         return this.authorService.createAuthor(author);
+    @Autowired
+    private AuthorMapper authorMapper;
+
+
+    //todo: admin
+    @PostMapping("/")
+    public AuthorDto createAuthor(@RequestBody AuthorDto authorDto) {
+        return this.authorMapper.convertToDto(
+                this.authorService.createAuthor(
+                        this.authorMapper.convertToEntity(authorDto)));
     }
 
+    //todo: admin
     @PutMapping("/{idAuthor}")
-    public Author updateAuthor(@PathVariable Integer idAuthor,
-                             @RequestBody Author author) {
-        return this.authorService.updateAuthor(idAuthor, author);
+    public AuthorDto updateAuthor(@PathVariable Integer idAuthor,
+                             @RequestBody AuthorDto authorDto) {
+        return this.authorMapper.convertToDto(
+                this.authorService.updateAuthor(
+                        idAuthor, this.authorMapper.convertToEntity(authorDto)));
     }
 
+    //неработает
+    //todo: admin
     //todo: подумать над тем, как лучше назвать запрос
     @PutMapping("/{idAuthor}/add-genre")
-    public Author addGenreToAuthor(@PathVariable Integer idAuthor,
+    public AuthorDto addGenreToAuthor(@PathVariable Integer idAuthor,
                                    @RequestParam Integer idGenre) {
-        return this.authorService.addGenreToAuthor(idAuthor, idGenre);
+        return this.authorMapper.convertToDto(
+                this.authorService.addGenreToAuthor(idAuthor, idGenre));
     }
 
+    //todo: admin
     @DeleteMapping("/{idAuthor}")
-    public Author deleteAuthorById(@PathVariable Integer idAuthor) {
-        return this.authorService.deleteAuthorById(idAuthor);
+    public AuthorDto deleteAuthorById(@PathVariable Integer idAuthor) {
+        return this.authorMapper.convertToDto(
+                this.authorService.deleteAuthorById(idAuthor));
     }
 
+    //неработает корректоно
+    //todo: admin / user
     @GetMapping("/{idAuthor}")
-    public Author getAuthorById(@PathVariable Integer idAuthor) {
-        return this.authorService.findAuthorById(idAuthor);
+    public AuthorDto findAuthorById(@PathVariable Integer idAuthor) {
+        return this.authorMapper.convertToDto(
+                authorService.findAuthorById(idAuthor));
     }
 
+    //неработает корректоно
     //todo: подумать над тем, как лучше назвать запрос
-    @GetMapping("/FullName")
-    public Author findAuthorByFullName(@RequestBody Author author) {
-        return this.authorService.findAuthorByFullName(author);
+    //todo: admin / user
+    @GetMapping("/by-name")
+    public AuthorDto findAuthorByFullName(String surnameSearch, String nameSearch, String patronymicSearch) {
+        return this.authorMapper.convertToDto(
+                this.authorService.findAuthorByFullName(surnameSearch, nameSearch, patronymicSearch));
     }
 
+    //неработает корректоно
+    //todo: admin / user
+    @GetMapping("/genres")
+    public List<AuthorDto> findAuthorsByGenre(Genre genre){
+        return this.authorMapper.convertToListDto(
+                this.authorService.findAuthorsByGenre(genre));
+    }
+
+    //todo: admin / user
     @GetMapping("/")
-    public List<Author> getAuthorList() {
-        List<Author> authorsList = this.authorService.findAuthorsList();
-        return authorsList;
+    public List<AuthorDto> findAuthorsList() {
+        return this.authorMapper.convertToListDto(
+                authorService.findAuthorsList());
     }
-
-
-
+/*
+    //todo: admin / user
+    //todo: сортировка?
+    public List<Author> findSortAuthorsList(SortingComparator sortingComparator) {
+        return this.authorService.findSortAuthorsList(sortingComparator);
+    }*/
 }

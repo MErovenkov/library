@@ -10,11 +10,13 @@ public interface IEntryService {
 
     Entry updateEntry(Integer idEntry, Entry newDataEntry);
 
+    Entry closedEntryById(Integer idEntry);
+
     Entry deleteEntryById(Integer idEntry);
 
     Entry findEntryById(Integer idEntry);
 
-    List<Entry> findEntriesByReaderCard(Integer idReaderCard);
+    List<Entry> findExpiredEntriesList();
 
     List<Entry> findEntriesList();
 

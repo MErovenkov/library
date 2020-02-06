@@ -31,11 +31,11 @@ public class Publisher implements Serializable {
     @Column(name = "address")
     private String address;
 
-    @JsonBackReference
-    @OneToMany(mappedBy = "publisher", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    @OneToMany(mappedBy = "publisher", cascade = CascadeType.ALL)
     private List<Book> bookList;
 
-    private Publisher(){}
+    public Publisher(){}
 
     public Publisher(String name, String address) {
         this.name = name;

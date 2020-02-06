@@ -25,7 +25,7 @@ import java.util.Properties;
 @ComponentScan("com.library")
 public class HibernateConfiguration {
 
-    private final static String DATABASE_DIALECT = "org.hibernate.dialect.PostgreSQL10Dialect";
+    private final static String DATABASE_DIALECT = "org.hibernate.dialect.PostgreSQL95Dialect";
     private final static String DATABASE_HBM2DDL_AUTO = "update";
     private final static String DATABASE_SHOW_SQL = "true";
 

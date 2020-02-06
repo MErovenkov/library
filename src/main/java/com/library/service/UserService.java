@@ -5,6 +5,7 @@ import com.library.dao.interfaces.IUserDao;
 import com.library.model.Authority;
 import com.library.model.User;
 import com.library.service.interfaces.IUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,7 +17,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
-
+/*
+@Slf4j
 @Service
 public class UserService implements IUserService, UserDetailsService {
 
@@ -30,13 +32,8 @@ public class UserService implements IUserService, UserDetailsService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public User findByUsername(String username) {
-        return userDao.findByUsername(username);
-    }
-
-    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = findByUsername(username);
+        User user = this.userDao.findByUsername(username);
 
         System.out.println(user);
 
@@ -64,4 +61,4 @@ public class UserService implements IUserService, UserDetailsService {
     public User deleteUserById(Integer idUser) {
         return null;
     }
-}
+}*/

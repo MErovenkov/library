@@ -40,7 +40,7 @@ public class Entry implements Serializable {
     @Column(name = "entry_status")
     private EntryStatus entryStatus;
 
-    private Entry(){}
+    public Entry(){}
 
     public Entry(ReaderCard readerCard, Book book, LocalDate takeDate,
                  LocalDate returnDatePlanned, LocalDate returnDate, EntryStatus entryStatus) {

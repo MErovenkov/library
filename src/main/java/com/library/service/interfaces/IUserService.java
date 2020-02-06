@@ -9,6 +9,4 @@ public interface IUserService {
     User updateUser(Integer idUser, User user);
 
     User deleteUserById(Integer idUser);
-
-    User findByUsername(String username);
 }

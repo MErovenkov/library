@@ -7,12 +7,9 @@ import com.library.model.enums.SortingComparator;
 
 import java.util.List;
 
-public interface IBookDao extends IGenericDao<Book> {
-
-    Book findBookByName(String nameBook);
+public interface IBookDao extends IGenericDao<Book>, ISearchingByName<Book> {
 
     List<Book> findBooksByAuthor(Author author);
 
-    List<Book> findSortBooksList(SortingComparator sortingComparator);
-
+    List<Book> findBooksByGenre(Integer idGenre);
 }

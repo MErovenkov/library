@@ -36,7 +36,7 @@ public class ReaderCard extends Person {
     @JoinColumn(name = "id_user")
     private User user;
 
-    private ReaderCard(){}
+    public ReaderCard(){}
 
     public ReaderCard(String surname, String name, String patronymic, Integer numberPhone, String email) {
         super(surname, name, patronymic);
