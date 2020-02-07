@@ -3,7 +3,6 @@ package com.library.model;
 import com.fasterxml.jackson.annotation.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -21,11 +20,14 @@ public class Author extends Person implements Serializable {
     private Integer id;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "author")
-    private List<AuthorGenre> authorGenre;
+    @ManyToMany
+    @JoinTable(name = "author_genre",
+            joinColumns = @JoinColumn(name = "id_author"),
+            inverseJoinColumns = @JoinColumn(name = "id_genre"))
+    private List<Genre> genreList;
 
     @JsonBackReference
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "author", cascade = CascadeType.REFRESH)
     private List<Book> bookList;
 
     public Author(){

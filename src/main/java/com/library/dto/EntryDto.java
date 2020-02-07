@@ -14,9 +14,9 @@ public class EntryDto {
 
     private Integer id;
 
-    private ReaderCard readerCard;
+    private ReaderCardDto readerCard;
 
-    private Book book;
+    private BookDto book;
 
     private LocalDate takeDate;
 

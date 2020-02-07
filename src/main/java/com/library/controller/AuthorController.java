@@ -31,20 +31,25 @@ public class AuthorController {
     //todo: admin
     @PutMapping("/{idAuthor}")
     public AuthorDto updateAuthor(@PathVariable Integer idAuthor,
-                             @RequestBody AuthorDto authorDto) {
+                                  @RequestBody AuthorDto authorDto) {
         return this.authorMapper.convertToDto(
                 this.authorService.updateAuthor(
                         idAuthor, this.authorMapper.convertToEntity(authorDto)));
     }
 
-    //неработает
     //todo: admin
-    //todo: подумать над тем, как лучше назвать запрос
     @PutMapping("/{idAuthor}/add-genre")
     public AuthorDto addGenreToAuthor(@PathVariable Integer idAuthor,
-                                   @RequestParam Integer idGenre) {
+                                      @RequestParam Integer idGenre) {
         return this.authorMapper.convertToDto(
                 this.authorService.addGenreToAuthor(idAuthor, idGenre));
+    }
+
+    @PutMapping("/{idAuthor}/delete-genre")
+    public AuthorDto deleteGenreToAuthor(@PathVariable Integer idAuthor,
+                                         @RequestParam(name = "id") Integer idGenre) {
+        return this.authorMapper.convertToDto(
+                this.authorService.deleteGenreToAuthor(idAuthor, idGenre));
     }
 
     //todo: admin
@@ -54,7 +59,6 @@ public class AuthorController {
                 this.authorService.deleteAuthorById(idAuthor));
     }
 
-    //неработает корректоно
     //todo: admin / user
     @GetMapping("/{idAuthor}")
     public AuthorDto findAuthorById(@PathVariable Integer idAuthor) {
@@ -62,21 +66,21 @@ public class AuthorController {
                 authorService.findAuthorById(idAuthor));
     }
 
-    //неработает корректоно
     //todo: подумать над тем, как лучше назвать запрос
     //todo: admin / user
     @GetMapping("/by-name")
-    public AuthorDto findAuthorByFullName(String surnameSearch, String nameSearch, String patronymicSearch) {
+    public AuthorDto findAuthorByFullName(@RequestParam(name = "surname") String surnameSearch,
+                                          @RequestParam(name = "name") String nameSearch,
+                                          @RequestParam(name = "patronymic") String patronymicSearch) {
         return this.authorMapper.convertToDto(
                 this.authorService.findAuthorByFullName(surnameSearch, nameSearch, patronymicSearch));
     }
 
-    //неработает корректоно
     //todo: admin / user
-    @GetMapping("/genres")
-    public List<AuthorDto> findAuthorsByGenre(Genre genre){
+    @GetMapping("/by-genre")
+    public List<AuthorDto> findAuthorsByGenre(@RequestParam(name = "id") Integer idGenre){
         return this.authorMapper.convertToListDto(
-                this.authorService.findAuthorsByGenre(genre));
+                this.authorService.findAuthorsByGenre(idGenre));
     }
 
     //todo: admin / user
@@ -87,7 +91,7 @@ public class AuthorController {
     }
 /*
     //todo: admin / user
-    //todo: сортировка?
+    //todo: по surname
     public List<Author> findSortAuthorsList(SortingComparator sortingComparator) {
         return this.authorService.findSortAuthorsList(sortingComparator);
     }*/

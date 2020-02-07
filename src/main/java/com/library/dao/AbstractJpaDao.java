@@ -66,7 +66,7 @@ public abstract class AbstractJpaDao<T extends Serializable>
         return entityManager.createQuery(criteriaQuery.select(root).where(predicate)).getSingleResult();
     }
 
-    public T findByFullName(String surnameSearch, String nameSearch, String patronymicSearch) {
+    public T findByFullName(String surnameSearch, String nameSearch, String patronymicSearch) throws NoResultException {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(clazz);
         Root<T> root = criteriaQuery.from(clazz);
@@ -82,8 +82,9 @@ public abstract class AbstractJpaDao<T extends Serializable>
     }
 
     public List<T> findAll(){
-        CriteriaQuery<T> criteriaQuery = entityManager
-                .getCriteriaBuilder().createQuery(clazz);
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(clazz);
+
         criteriaQuery.select(criteriaQuery.from(clazz));
 
         return entityManager.createQuery(criteriaQuery)

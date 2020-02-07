@@ -10,4 +10,4 @@ public class GenreDto {
     private Integer id;
 
     private String name;
-}
+ }

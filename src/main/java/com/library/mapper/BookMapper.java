@@ -12,6 +12,7 @@ public interface BookMapper {
     BookDto convertToDto(Book book);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "inStock", ignore = true)
     Book convertToEntity(BookDto bookDto);
 
     List<BookDto> convertToListDto(List<Book> bookList);

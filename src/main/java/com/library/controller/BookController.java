@@ -3,6 +3,7 @@ package com.library.controller;
 import com.library.dto.BookDto;
 import com.library.dto.EntryDto;
 import com.library.mapper.BookMapper;
+import com.library.model.Book;
 import com.library.model.enums.SortingComparator;
 import com.library.service.interfaces.IBookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,36 +45,34 @@ public class BookController {
 
     //todo: admin / user
     @GetMapping("/{idBook}")
-    public BookDto findBookById(@PathVariable Integer idBook) {
-        return this.bookMapper.convertToDto(bookService.findBookById(idBook));
+    public Book findBookById(@PathVariable Integer idBook) {
+        return bookService.findBookById(idBook);
+        //return this.bookMapper.convertToDto(bookService.findBookById(idBook));
     }
 
     //todo: admin / user
     //todo: getList? книг может быть несколько с идентичным названием
-    @GetMapping("/{nameBook}")
+    @GetMapping("/name={nameBook}")
     public BookDto findBookByName(@PathVariable String nameBook) {
         return this.bookMapper.convertToDto(this.bookService.findBookByName(nameBook));
     }
 
     //todo: admin / user
     //todo:
-    @GetMapping("/findBooksByAuthor")
-    public List<BookDto> findBooksByAuthor(@RequestParam Integer idAuthor) {
-        return this.bookMapper.convertToListDto(this.bookService.findBooksByAuthor(idAuthor));
+    //////
+    @GetMapping("/by-author")
+    public List<BookDto> findBooksByAuthor(@RequestParam(name = "id") Integer idAuthor) {
+        return this.bookMapper.convertToListDto(
+                this.bookService.findBooksByAuthor(idAuthor));
     }
 
     //todo: admin / user
     //todo:
-    @GetMapping("/findBooksByGenre/{idGenre}")
-    public List<BookDto> findBooksByGenre(@PathVariable Integer idGenre) {
+    //////////
+    @GetMapping("/by-genre")
+    public List<BookDto> findBooksByGenre(@RequestParam(name = "id") Integer idGenre) {
         return this.bookMapper.convertToListDto(
                 this.bookService.findBooksByGenre(idGenre));
-    }
-
-    //todo: admin
-    //todo: вывод списка записей по книге
-    public List<EntryDto> findEntriesByBook(Integer idBook) {
-        return null;
     }
 
     //todo: admin / user
@@ -82,15 +81,18 @@ public class BookController {
         return this.bookMapper.convertToListDto(bookService.findBooksList());
     }
 
+
+
+    /*
     //todo: admin / user
     //todo: имя компоратора
     public List<BookDto> findSortBooksList(SortingComparator sortingComparator) {
         return null;
         //return this.bookService.findSortBooksList(sortingComparator);
     }
-
+*/
     //todo: сортировка книг по алфавиту/автору/жанру по enum? или String?
-
+    //////
 
     /*
     @GetMapping("/sort")

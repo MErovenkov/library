@@ -4,6 +4,7 @@ import org.hibernate.cfg.Environment;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -23,6 +24,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 @EnableJpaRepositories("com.library.dao")
 @ComponentScan("com.library")
+@PropertySource("classpath:db.properties")
 public class HibernateConfiguration {
 
     private final static String DATABASE_DIALECT = "org.hibernate.dialect.PostgreSQL95Dialect";
@@ -66,7 +68,6 @@ public class HibernateConfiguration {
                 = new HibernateJpaVendorAdapter();
 
         hibernateJpaVendorAdapter.setDatabase(Database.POSTGRESQL);
-       // hibernateJpaVendorAdapter.setGenerateDdl(true);
 
         return hibernateJpaVendorAdapter;
     }

@@ -4,6 +4,7 @@ import com.library.dao.interfaces.IGenreDao;
 import com.library.model.Genre;
 import com.library.service.interfaces.IGenreService;
 import com.library.utils.NamingFormatter;
+import com.library.utils.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -44,7 +45,7 @@ public class GenreService implements IGenreService {
     public Genre createGenre(Genre genre) {
         try {
             if (genre != null) {
-                if (validationCheck(genre)) {
+                if (Validator.getInstance().validationCheckName(genre.getName())) {
                     genre.setName(NamingFormatter.getInstance().formatForName(genre.getName()));
 
                     return this.genreDao.create(genre);
@@ -82,7 +83,7 @@ public class GenreService implements IGenreService {
     @Override
     public Genre updateGenre(Integer idGenre, Genre newDataGenre) {
         try {
-            if(validationCheck(newDataGenre)) {
+            if(Validator.getInstance().validationCheckName(newDataGenre.getName())) {
                 Genre genre = this.genreDao.findOneById(idGenre);
 
                 if (genre != null) {
@@ -100,43 +101,6 @@ public class GenreService implements IGenreService {
 
         return null;
     }
-
-    //todo:изменить
-    /**
-     *  Функция
-     *  @see GenreService#validationCheck(Genre)
-     *  @param genre
-     *
-     *  проверяет полученный {@param genre} на корректность имени {@link Genre#getName()}
-     *
-     *  @return возвращяет результат проверки
-     * */
-    private boolean validationCheck(Genre genre) {
-        boolean validate = false;
-
-        if (genre.getName() != null) {
-            if (!genre.getName().trim().equals("")) {
-                if (genre.getName().chars().allMatch(Character::isLetter)) {
-                    validate = true;
-
-                } else {
-                    log.warn("Имя жанра должна состоять только из букв");
-                    //TODO: 02.02.2020 выбросить фронт exception
-                }
-            } else {
-                log.warn("Попытка " + new Throwable().getStackTrace()[1].getMethodName()
-                        +  " с пустым полем name");
-                //TODO: 02.02.2020 выбросить фронт exception
-            }
-        } else {
-            log.warn("Попытка " + new Throwable().getStackTrace()[1].getMethodName()
-                    + " с name равным null");
-            //TODO: 02.02.2020 выбросить фронт exception
-        }
-
-        return validate;
-    }
-
 
     /**
      *  Функция
@@ -180,11 +144,11 @@ public class GenreService implements IGenreService {
      *
      * */
     @Override
-    public Genre findGenreByName(String nameGenre) {
+    public Genre findGenreByName(String genreName) {
         try {
-            return this.genreDao.findByName(nameGenre);
+            return this.genreDao.findByName(genreName);
         } catch (NoResultException e) {
-            log.error("Запрос на поиск по имени: " + nameGenre
+            log.error("Запрос на поиск по имени: " + genreName
                     + " не выполнен, т.к.такого жанра не существует", e);
 
             // TODO: 02.02.2020 выбросить фронт exception

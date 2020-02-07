@@ -29,11 +29,11 @@ public class Genre implements Serializable {
     private String name;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "genre")
-    private List<AuthorGenre> authorGenreList;
+    @ManyToMany(mappedBy = "genreList", cascade = CascadeType.REFRESH)
+    private List<Author> authorList;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "genre", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "genre", cascade = CascadeType.REFRESH)
     private List<Book> bookList;
 
     public Genre(){}

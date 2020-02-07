@@ -21,7 +21,5 @@ public class ReaderCardDto {
 
     private Integer maxBooksTaken;
 
-    private List<Entry> entryList;
-
     private User user;
 }

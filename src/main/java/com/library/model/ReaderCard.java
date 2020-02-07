@@ -29,7 +29,7 @@ public class ReaderCard extends Person {
     @Column(name = "max_books_taken")
     private Integer maxBooksTaken;
 
-    @OneToMany(mappedBy = "readerCard")
+    @OneToMany(mappedBy = "readerCard", cascade = CascadeType.REFRESH)
     private List<Entry> entryList;
 
     @OneToOne

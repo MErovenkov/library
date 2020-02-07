@@ -5,6 +5,7 @@ import com.library.model.ReaderCard;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -13,11 +14,9 @@ public class UserDto {
 
     private Integer id;
 
-    private String userName;
+    private String username;
 
     private String password;
 
     private ReaderCard readerCard;
-
-    private Set<Authority> authority;
 }

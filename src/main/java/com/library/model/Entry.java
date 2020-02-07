@@ -1,14 +1,16 @@
 package com.library.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.library.model.enums.EntryStatus;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "entry")
 public class Entry implements Serializable {
@@ -42,69 +44,13 @@ public class Entry implements Serializable {
 
     public Entry(){}
 
-    public Entry(ReaderCard readerCard, Book book, LocalDate takeDate,
-                 LocalDate returnDatePlanned, LocalDate returnDate, EntryStatus entryStatus) {
+    public Entry(ReaderCard readerCard, Book book,
+                 LocalDate returnDatePlanned, LocalDate returnDate) {
         this.readerCard = readerCard;
         this.book = book;
-        this.takeDate = takeDate;
+        this.takeDate = LocalDate.now();
         this.returnDatePlanned = returnDatePlanned;
         this.returnDate = returnDate;
-        this.entryStatus = entryStatus;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public ReaderCard getReaderCard() {
-        return readerCard;
-    }
-
-    public void setReaderCard(ReaderCard readerCard) {
-        this.readerCard = readerCard;
-    }
-
-    public Book getBook() {
-        return book;
-    }
-
-    public void setBook(Book book) {
-        this.book = book;
-    }
-
-    public LocalDate getTakeDate() {
-        return takeDate;
-    }
-
-    public void setTakeDate(LocalDate takeDate) {
-        this.takeDate = takeDate;
-    }
-
-    public LocalDate getReturnDatePlanned() {
-        return returnDatePlanned;
-    }
-
-    public void setReturnDatePlanned(LocalDate returnDatePlanned) {
-        this.returnDatePlanned = returnDatePlanned;
-    }
-
-    public LocalDate getReturnDate() {
-        return returnDate;
-    }
-
-    public void setReturnDate(LocalDate returnDate) {
-        this.returnDate = returnDate;
-    }
-
-    public EntryStatus getEntryStatus() {
-        return entryStatus;
-    }
-
-    public void setEntryStatus(EntryStatus entryStatus) {
-        this.entryStatus = entryStatus;
+        this.entryStatus = EntryStatus.OPEN;
     }
 }

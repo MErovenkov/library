@@ -3,6 +3,7 @@ package com.library.service;
 import com.library.dao.interfaces.IAuthorDao;
 import com.library.dao.interfaces.IBookDao;
 import com.library.dao.interfaces.IGenreDao;
+import com.library.dao.interfaces.IPublisherDao;
 import com.library.model.*;
 import com.library.model.enums.SortingComparator;
 import com.library.service.interfaces.IBookService;
@@ -23,19 +24,24 @@ import java.util.List;
 public class BookService implements IBookService {
 
     @Autowired
-    private IAuthorDao authorDao;
-
-    @Autowired
     private IBookDao bookDao;
 
     @Autowired
+    private IAuthorDao authorDao;
+
+    @Autowired
     private IGenreDao genreDao;
+
+    @Autowired
+    private IPublisherDao publisherDao;
+
 
     @Override
     public Book createBook(Book book) {
         try {
             if (book != null) {
                 if (validationCheck(book)) {
+                    book.setInStock(true);
                     return this.bookDao.create(book);
                 }
             } else {
@@ -77,34 +83,37 @@ public class BookService implements IBookService {
         boolean validate = false;
 
         if (!book.getName().trim().equals("") || book.getName() != null) {
-            if (book.getAuthor() != null) {
-                if (book.getGenre() != null) {
-                    if (book.getPublisher() != null) {
+            if (book.getAuthor() != null
+                    && this.authorDao.findOneById(book.getAuthor().getId()) != null) {
+                if (book.getGenre() != null
+                        && this.genreDao.findOneById(book.getGenre().getId()) != null) {
+                    if (book.getPublisher() != null
+                            && this.publisherDao.findOneById(book.getPublisher().getId()) != null) {
                         if (book.getShortSpecification() != null) {
                             if (book.getNumberPages() != null) {
                                 validate = true;
                             } else {
-                                log.warn("sdas");
+                                log.warn("сило страниц не должно быть нул");
                                 //todo: http,,,,
                             }
                         } else {
-                            log.warn("sdas");
+                            log.warn("описание книги недолжно быть нул");
                             //todo: http,,,,
                         }
                     } else {
-                        log.warn("sdas");
+                        log.warn("издатель нул или нет в бд");
                         //todo: http,,,,
                     }
                 } else {
-                    log.warn("sdas");
+                    log.warn("жанр нул или нет в бд");
                     //todo: http,,,,
                 }
             } else {
-                log.warn("sdas");
+                log.warn("Автор null или нет в бд");
                 //todo: http,,,,
             }
         } else {
-            log.warn("sdas");
+            log.warn("имя книги не должно быть нул или пустым");
             //todo: http,,,,
         }
 
@@ -145,14 +154,13 @@ public class BookService implements IBookService {
         }
     }
 
-//todo:
     public List<Book> findBooksByAuthor(Integer idAuthor) {
-        return this.authorDao.findOneById(idAuthor).getBookList();
+        return this.authorDao.findBooksByAuthor(idAuthor);
     }
 
     //todo:
     public List<Book> findBooksByGenre(Integer idGenre) {
-        return this.genreDao.findOneById(idGenre).getBookList();
+        return this.genreDao.findBooksByGenre(idGenre);
     }
 
     @Override

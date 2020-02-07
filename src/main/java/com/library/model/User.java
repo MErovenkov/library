@@ -1,5 +1,6 @@
 package com.library.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -27,21 +28,24 @@ public class User implements Serializable, UserDetails {
     @Column(name = "password")
     private String password;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_reader_card")
     private ReaderCard readerCard;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    @ManyToMany
     @JoinTable(name = "users_authority", joinColumns = @JoinColumn(name = "id_user"),
             inverseJoinColumns = @JoinColumn(name = "id_authority"))
-    private Set<Authority> authority;
+    private List<Authority> authorityList;
 
     public User(){}
 
-    public User(String userName, String password, ReaderCard readerCard, Set<Authority> authority) {
+    public User(String userName, String password, ReaderCard readerCard, List<Authority> authorityList) {
         this.userName = userName;
         this.password = password;
         this.readerCard = readerCard;
-        this.authority = authority;
+        this.authorityList = authorityList;
     }
 
     @Override

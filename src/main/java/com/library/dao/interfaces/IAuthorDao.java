@@ -1,13 +1,16 @@
 package com.library.dao.interfaces;
 
 import com.library.model.Author;
+import com.library.model.Book;
 import com.library.model.Genre;
 
 import java.util.List;
 
 public interface IAuthorDao extends IGenericDao<Author>, ISearchingByFullName<Author> {
 
-    List<Author> findAuthorsListByGenre(Genre genre);
+    Author addGenreToAuthor(Author author, Genre genre);
 
-    List<Genre> findGenreListByAuthor(Author author);
+    Author deleteGenreToAuthor(Author author, Genre genre);
+
+    List<Book> findBooksByAuthor(Integer idAuthor);
 }

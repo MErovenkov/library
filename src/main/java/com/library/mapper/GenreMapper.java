@@ -13,8 +13,6 @@ public interface GenreMapper {
     GenreDto convertToDto(Genre genre);
 
     @Mapping(target = "id", ignore = true)
-    //@Mapping(target = "authorList", ignore = true)
-    @Mapping(target = "bookList", ignore = true)
     Genre convertToEntity(GenreDto genreDto);
 
     List<GenreDto> convertToListDto(List<Genre> genreList);

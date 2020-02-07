@@ -8,6 +8,7 @@ import com.library.model.Genre;
 import com.library.model.enums.SortingComparator;
 import com.library.service.interfaces.IAuthorService;
 import com.library.utils.NamingFormatter;
+import com.library.utils.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -44,7 +45,10 @@ public class AuthorService implements IAuthorService {
     public Author createAuthor(Author author) {
         try {
             if (author != null) {
-                if (validationFullNameCheck(author)) {
+                if (Validator.getInstance().validationFullNameCheck(
+                        author.getSurname(),
+                        author.getName(),
+                        author.getPatronymic())) {
                     return this.authorDao.create(author);
                 }
             }
@@ -65,7 +69,10 @@ public class AuthorService implements IAuthorService {
     @Override
     public Author updateAuthor(Integer idAuthor, Author newDataAuthor) {
         try {
-            if (validationFullNameCheck(newDataAuthor)) {
+            if (Validator.getInstance().validationFullNameCheck(
+                    newDataAuthor.getSurname(),
+                    newDataAuthor.getName(),
+                    newDataAuthor.getPatronymic())) {
                 Author author = this.authorDao.findOneById(idAuthor);
 
                 if (author != null) {
@@ -88,41 +95,6 @@ public class AuthorService implements IAuthorService {
         return null;
     }
 
-    //TODO: 03.02.2020
-    /**
-     *  Функция
-     *
-     * */
-    private boolean validationFullNameCheck(Author author) {
-        boolean validate = false;
-
-        if (author.getSurname() != null
-                || author.getName() != null
-                || author.getPatronymic() != null) {
-            if (!(author.getSurname().trim().equals("")
-                    || author.getName().trim().equals("")
-                    || author.getPatronymic().trim().equals(""))) {
-                if (author.getSurname().chars().allMatch(Character::isLetter)
-                        ||author.getName().chars().allMatch(Character::isLetter)
-                        || author.getPatronymic().chars().allMatch(Character::isLetter)) {
-                    validate = true;
-                } else {
-                    log.warn("Имя жанра должна состоять только из букв");
-                    //TODO: 02.02.2020 выбросить фронт exception
-                }
-            } else {
-                log.warn("Попытка " + new Throwable().getStackTrace()[1].getMethodName()
-                        +  " с пустым полем name");
-                //TODO: 02.02.2020 выбросить фронт exception
-            }
-        } else {
-            log.warn("Попытка " + new Throwable().getStackTrace()[1].getMethodName()
-                    + " с name равным null");
-            //TODO: 02.02.2020 выбросить фронт exception
-        }
-
-        return validate;
-    }
 
     //TODO:
     /**
@@ -130,16 +102,30 @@ public class AuthorService implements IAuthorService {
      *
      * */
     public Author addGenreToAuthor(Integer idAuthor, Integer idGenre) {
+        try {
+            Author author = this.authorDao.findOneById(idAuthor);
+            Genre genre = this.genreDao.findOneById(idGenre);
+
+            if (genre != null && author != null) {
+                return this.authorDao.addGenreToAuthor(author, genre);
+            } else {
+                log.warn("!");
+                //TODO: 03.02.2020 выбросить фронт exception
+            }
+
+            return null;
+        } catch (DataIntegrityViolationException e) {
+            log.error("" + e);
+            return null;
+        }
+    }
+
+    public Author deleteGenreToAuthor(Integer idAuthor, Integer idGenre) {
         Author author = this.authorDao.findOneById(idAuthor);
-        this.authorDao.findGenreListByAuthor(author);
-
-
         Genre genre = this.genreDao.findOneById(idGenre);
 
         if (genre != null && author != null) {
-
-
-            return this.authorDao.update(author);
+            return this.authorDao.deleteGenreToAuthor(author, genre);
         } else {
             log.warn("!");
             //TODO: 03.02.2020 выбросить фронт exception
@@ -174,8 +160,6 @@ public class AuthorService implements IAuthorService {
      * */
     @Override
     public Author findAuthorById(Integer idAuthor) {
-        Author author = this.authorDao.findOneById(idAuthor);
-
         return this.authorDao.findOneById(idAuthor);
     }
 
@@ -204,11 +188,9 @@ public class AuthorService implements IAuthorService {
         return this.authorDao.findAll();
     }
 
-
-    public List<Author> findAuthorsByGenre(Genre genre){
-
-
-        return this.authorDao.findAuthorsListByGenre(genre);
+    @Override
+    public List<Author> findAuthorsByGenre(Integer idGenre){
+        return this.genreDao.findAuthorsByGenre(idGenre);
     }
 
     public List<Author> findSortAuthorsList(SortingComparator sortingComparator) {

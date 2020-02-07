@@ -2,7 +2,6 @@ package com.library.controller;
 
 import com.library.dto.PublisherDto;
 import com.library.mapper.PublisherMapper;
-import com.library.model.Publisher;
 import com.library.service.interfaces.IPublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -62,5 +61,4 @@ public class PublisherController {
     public List<PublisherDto> findPublishersList() {
         return this.publisherMapper.convertToListDto(this.publisherService.findPublishersList());
     }
-
 }

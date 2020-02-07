@@ -7,7 +7,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -20,11 +19,11 @@ public class Authority implements Serializable {
     @Column(name = "id_authority")
     private Integer id;
 
-    @Column(name = "name_authority")
+    @Column(name = "name")
     private String nameAuthority;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "authority", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "authorityList", cascade = CascadeType.ALL)
     private List<User> usersList;
 
     private Authority(){}

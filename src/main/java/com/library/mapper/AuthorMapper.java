@@ -10,9 +10,11 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface AuthorMapper {
 
+    @Mapping(target = "genreDtoList", source = "genreList")
     AuthorDto convertToDto(Author author);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "genreList", ignore = true)
     @Mapping(target = "bookList", ignore = true)
     Author convertToEntity(AuthorDto authorDto);
 
