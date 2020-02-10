@@ -49,7 +49,7 @@ public class ReaderCardController {
 
     //todo: admin
     //todo: подумать над тем, как лучше назвать запрос
-    @GetMapping("/by-name")
+    @GetMapping("/full-name")
     public ReaderCardDto findReaderCardByFullName(@RequestParam(name = "surname") String surnameSearch,
                                                   @RequestParam(name = "name") String nameSearch,
                                                   @RequestParam(name = "patronymic") String patronymicSearch) {

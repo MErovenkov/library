@@ -68,7 +68,7 @@ public class AuthorController {
 
     //todo: подумать над тем, как лучше назвать запрос
     //todo: admin / user
-    @GetMapping("/by-name")
+    @GetMapping("/search")
     public AuthorDto findAuthorByFullName(@RequestParam(name = "surname") String surnameSearch,
                                           @RequestParam(name = "name") String nameSearch,
                                           @RequestParam(name = "patronymic") String patronymicSearch) {
@@ -77,7 +77,7 @@ public class AuthorController {
     }
 
     //todo: admin / user
-    @GetMapping("/by-genre")
+    @GetMapping("/genre")
     public List<AuthorDto> findAuthorsByGenre(@RequestParam(name = "id") Integer idGenre){
         return this.authorMapper.convertToListDto(
                 this.authorService.findAuthorsByGenre(idGenre));

@@ -49,24 +49,24 @@ public class EntryController {
         return this.entryMapper.convertToDto(this.entryService.findEntryById(idEntry));
     }
 
-    @GetMapping("/by-book/{idBook}")
-    public List<EntryDto> findEntriesByBookId(@PathVariable Integer idBook) {
+    @GetMapping("/book")
+    public List<EntryDto> findEntriesByBookId(@RequestParam(name = "id") Integer idBook) {
         return this.entryMapper.convertToListDto(this.entryService.findEntriesByBookId(idBook));
     }
 
-    @GetMapping("/by-reader-card/{idReaderCard}")
-    public List<EntryDto> findEntriesByReaderCardId(@PathVariable Integer idReaderCard) {
+    @GetMapping("/reader-card")
+    public List<EntryDto> findEntriesByReaderCardId(@RequestParam(name = "id") Integer idReaderCard) {
         return this.entryMapper.convertToListDto(this.entryService.findEntriesByReaderCardId(idReaderCard));
     }
 
-    @GetMapping("/by-reader-card-expired/{idReaderCard}")
-    public List<EntryDto> findExpiredEntriesListByReaderCardId(@PathVariable Integer idReaderCard) {
+    @GetMapping("/reader-card-expired")
+    public List<EntryDto> findExpiredEntriesListByReaderCardId(@RequestParam(name = "id") Integer idReaderCard) {
         return this.entryMapper.convertToListDto(
                 this.entryService.findExpiredEntriesListByReaderCardId(idReaderCard));
     }
 
-    @GetMapping("/by-reader-card-open/{idReaderCard}")
-    public List<EntryDto> findOpenedEntriesListByReaderCardId(@PathVariable Integer idReaderCard) {
+    @GetMapping("/by-reader-card-open")
+    public List<EntryDto> findOpenedEntriesListByReaderCardId(@RequestParam(name = "id") Integer idReaderCard) {
         return this.entryMapper.convertToListDto(
                 this.entryService.findOpenedEntriesListByReaderCardId(idReaderCard));
     }

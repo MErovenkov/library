@@ -58,7 +58,7 @@ public class BookController {
     //todo: admin / user
     //todo:
     //////
-    @GetMapping("/by-author")
+    @GetMapping("/author")
     public List<BookDto> findBooksByAuthor(@RequestParam(name = "id") Integer idAuthor) {
         return this.bookMapper.convertToListDto(
                 this.bookService.findBooksByAuthor(idAuthor));
@@ -67,7 +67,7 @@ public class BookController {
     //todo: admin / user
     //todo:
     //////////
-    @GetMapping("/by-genre")
+    @GetMapping("/genre")
     public List<BookDto> findBooksByGenre(@RequestParam(name = "id") Integer idGenre) {
         return this.bookMapper.convertToListDto(
                 this.bookService.findBooksByGenre(idGenre));
