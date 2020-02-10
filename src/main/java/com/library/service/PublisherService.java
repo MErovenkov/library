@@ -106,7 +106,7 @@ public class PublisherService implements IPublisherService {
         Publisher publisher = this.publisherDao.findOneById(idPublisher);
 
         if (publisher != null) {
-            return this.publisherDao.deleteById(idPublisher);
+            return this.publisherDao.delete(publisher);
         } else {
             log.warn("Издателя с таким id не существует");
             //TODO: 02.02.2020 выбросить фронт exception

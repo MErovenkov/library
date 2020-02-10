@@ -6,7 +6,10 @@ import com.library.model.enums.SortingComparator;
 
 import java.util.List;
 
-public interface IBookDao extends IGenericDao<Book>, ISearchingByName<Book> {
+public interface IBookDao extends IGenericDao<Book> {
+    Book findIsStockBookByName(String name);
+
+    List<Book> findBooksByName(String name);
 
     List<Entry> findEntriesByBook(Integer idBook);
 

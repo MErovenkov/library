@@ -8,6 +8,10 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Класс, обозначающий аттора книги
+ * */
+
 @Getter
 @Setter
 @Entity

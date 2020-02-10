@@ -3,6 +3,7 @@ package com.library.controller;
 import com.library.dto.UserDto;
 import com.library.mapper.UserMapper;
 import com.library.model.User;
+import com.library.service.interfaces.IReaderCardService;
 import com.library.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +18,15 @@ public class UserController {
     private IUserService userService;
 
     @Autowired
+    private IReaderCardService readerCardService;
+
+    @Autowired
     private UserMapper userMapper;
 
     //todo: admin
-    //todo: добавлять пользователя вместе с карточкой читателя
     @PostMapping("/")
     public UserDto createUser(@RequestBody UserDto userDto) {
-        return this.userMapper.convertToDto(
+         return this.userMapper.convertToDto(
                 this.userService.createUser(
                         this.userMapper.convertToEntity(userDto)));
     }

@@ -1,6 +1,5 @@
 package com.library.mapper;
 
-import com.library.dao.ReaderCardDao;
 import com.library.dto.ReaderCardDto;
 import com.library.model.ReaderCard;
 import org.mapstruct.Mapper;
@@ -13,6 +12,7 @@ public interface ReaderCardMapper {
 
     ReaderCardDto convertToDto(ReaderCard readerCard);
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "penalty", ignore = true)
     @Mapping(target = "maxBooksTaken", ignore = true)
     ReaderCard convertToEntity(ReaderCardDto readerCardDto);

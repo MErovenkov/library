@@ -18,7 +18,7 @@ public interface IBookService {
 
     Book findBookById(Integer idBook);
 
-    Book findBookByName(String nameBook);
+    List<Book> findBooksByName(String nameBook);
 
     List<Book> findBooksByAuthor(Integer idAuthor);
 

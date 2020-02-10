@@ -1,10 +1,10 @@
 package com.library.configuration;
 
 import org.hibernate.cfg.Environment;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -24,19 +24,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 @EnableJpaRepositories("com.library.dao")
 @ComponentScan("com.library")
-@PropertySource("classpath:db.properties")
 public class HibernateConfiguration {
-
-    private final static String DATABASE_DIALECT = "org.hibernate.dialect.PostgreSQL95Dialect";
-    private final static String DATABASE_HBM2DDL_AUTO = "update";
-    private final static String DATABASE_SHOW_SQL = "true";
-
-    private final static String DATABASE_DRIVER = "org.postgresql.Driver";
-    private final static String DATABASE_URL = "jdbc:postgresql://localhost:5433/library";
-    private final static String DATABASE_USERNAME = "postgres";
-    private final static String DATABASE_PASSWORD = "123";
-
-    private final static String PACKAGES_MODEL = "com.library.model";
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource, JpaVendorAdapter jpaVendorAdapter) {
@@ -45,7 +33,7 @@ public class HibernateConfiguration {
         factory.setDataSource(dataSource);
         factory.setJpaVendorAdapter(jpaVendorAdapter);
         factory.setJpaProperties(hibernateProperties());
-        factory.setPackagesToScan(PACKAGES_MODEL);
+        factory.setPackagesToScan("com.library.model");
 
         return factory;
     }
@@ -54,10 +42,10 @@ public class HibernateConfiguration {
     public DataSource dataSource() {
         DriverManagerDataSource driver = new DriverManagerDataSource();
 
-        driver.setDriverClassName(DATABASE_DRIVER);
-        driver.setUrl(DATABASE_URL);
-        driver.setUsername(DATABASE_USERNAME);
-        driver.setPassword(DATABASE_PASSWORD);
+        driver.setDriverClassName("org.postgresql.Driver");
+        driver.setUrl("jdbc:postgresql://localhost:5433/library");
+        driver.setUsername("postgres");
+        driver.setPassword("123");
 
         return driver;
     }
@@ -76,11 +64,11 @@ public class HibernateConfiguration {
         Properties hibernateProperties = new Properties();
 
         hibernateProperties.setProperty(
-                Environment.HBM2DDL_AUTO, DATABASE_HBM2DDL_AUTO);
+                Environment.HBM2DDL_AUTO, "update");
         hibernateProperties.setProperty(
-                Environment.DIALECT, DATABASE_DIALECT);
+                Environment.DIALECT, "org.hibernate.dialect.PostgreSQL95Dialect");
         hibernateProperties.setProperty(
-                Environment.SHOW_SQL, DATABASE_SHOW_SQL);
+                Environment.SHOW_SQL, "true");
 
         return hibernateProperties;
     }

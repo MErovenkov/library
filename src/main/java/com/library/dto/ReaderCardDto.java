@@ -5,13 +5,17 @@ import com.library.model.User;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 public class ReaderCardDto {
 
     private Integer id;
+
+    private String surname;
+
+    private String name;
+
+    private String patronymic;
 
     private Integer numberPhone;
 
@@ -20,6 +24,4 @@ public class ReaderCardDto {
     private Integer penalty;
 
     private Integer maxBooksTaken;
-
-    private User user;
 }

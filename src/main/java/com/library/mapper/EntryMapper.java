@@ -9,9 +9,11 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface EntryMapper {
+
     EntryDto convertToDto(Entry entry);
 
     @Mapping(target = "takeDate", ignore = true)
+    @Mapping(target = "returnDate", ignore = true)
     Entry convertToEntity(EntryDto entryDto);
 
     List<EntryDto> convertToListDto(List<Entry> entryList);

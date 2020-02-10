@@ -1,10 +1,8 @@
 package com.library.controller;
 
 import com.library.dto.BookDto;
-import com.library.dto.EntryDto;
 import com.library.mapper.BookMapper;
 import com.library.model.Book;
-import com.library.model.enums.SortingComparator;
 import com.library.service.interfaces.IBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -53,8 +51,8 @@ public class BookController {
     //todo: admin / user
     //todo: getList? книг может быть несколько с идентичным названием
     @GetMapping("/name={nameBook}")
-    public BookDto findBookByName(@PathVariable String nameBook) {
-        return this.bookMapper.convertToDto(this.bookService.findBookByName(nameBook));
+    public List<BookDto> findBookByName(@PathVariable String nameBook) {
+        return this.bookMapper.convertToListDto(this.bookService.findBooksByName(nameBook));
     }
 
     //todo: admin / user

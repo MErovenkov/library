@@ -57,6 +57,8 @@ public class GenreService implements IGenreService {
         } catch (PersistenceException e) {
             //TODO: 02.02.2020 повторяющееся значение ключа нарушает ограничение уникальности "genre_name_key",
             // жанр уже существует с таким именем.
+        } catch (StringIndexOutOfBoundsException e) {
+            log.error( "" + e);
         }
 
         return null;
@@ -97,6 +99,8 @@ public class GenreService implements IGenreService {
             }
         } catch (DataIntegrityViolationException e) {
             //TODO: 02.02.2020 ОШИБКА: повторяющееся значение ключа нарушает ограничение уникальности "genre_name_key"
+        } catch (StringIndexOutOfBoundsException e) {
+            log.error( "" + e);
         }
 
         return null;

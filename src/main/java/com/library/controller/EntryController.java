@@ -1,5 +1,6 @@
 package com.library.controller;
 
+import com.library.dto.CreatingEntryDto;
 import com.library.dto.EntryDto;
 import com.library.mapper.EntryMapper;
 import com.library.service.interfaces.IEntryService;
@@ -20,10 +21,12 @@ public class EntryController {
 
     //todo: admin
     @PostMapping("/")
-    public EntryDto createEntry(@RequestBody EntryDto entryDto) {
+    public EntryDto createEntry(@RequestBody CreatingEntryDto creatingEntryDto) {
         return this.entryMapper.convertToDto(
                 this.entryService.createEntry(
-                        this.entryMapper.convertToEntity(entryDto)));
+                        creatingEntryDto.getIdReaderCard(),
+                        creatingEntryDto.getNameBook(),
+                        creatingEntryDto.getReturnDatePlanned()));
     }
 
     //todo: admin
@@ -47,13 +50,25 @@ public class EntryController {
     }
 
     @GetMapping("/by-book/{idBook}")
-    public List<EntryDto> findEntriesByBook(@PathVariable Integer idBook) {
-        return this.entryMapper.convertToListDto(this.entryService.findEntriesByBook(idBook));
+    public List<EntryDto> findEntriesByBookId(@PathVariable Integer idBook) {
+        return this.entryMapper.convertToListDto(this.entryService.findEntriesByBookId(idBook));
     }
 
     @GetMapping("/by-reader-card/{idReaderCard}")
-    public List<EntryDto> findEntriesByReaderCard(@PathVariable Integer idReaderCard) {
-        return this.entryMapper.convertToListDto(this.entryService.findEntriesByReaderCard(idReaderCard));
+    public List<EntryDto> findEntriesByReaderCardId(@PathVariable Integer idReaderCard) {
+        return this.entryMapper.convertToListDto(this.entryService.findEntriesByReaderCardId(idReaderCard));
+    }
+
+    @GetMapping("/by-reader-card-expired/{idReaderCard}")
+    public List<EntryDto> findExpiredEntriesListByReaderCardId(@PathVariable Integer idReaderCard) {
+        return this.entryMapper.convertToListDto(
+                this.entryService.findExpiredEntriesListByReaderCardId(idReaderCard));
+    }
+
+    @GetMapping("/by-reader-card-open/{idReaderCard}")
+    public List<EntryDto> findOpenedEntriesListByReaderCardId(@PathVariable Integer idReaderCard) {
+        return this.entryMapper.convertToListDto(
+                this.entryService.findOpenedEntriesListByReaderCardId(idReaderCard));
     }
 
     //todo: admin

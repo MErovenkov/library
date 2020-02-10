@@ -23,26 +23,24 @@ public class User implements Serializable, UserDetails {
     private Integer id;
 
     @Column(name = "username")
-    private String userName;
+    private String username;
 
     @Column(name = "password")
     private String password;
 
-    @JsonIgnore
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_reader_card")
     private ReaderCard readerCard;
 
-    @JsonIgnore
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.REFRESH)
     @JoinTable(name = "users_authority", joinColumns = @JoinColumn(name = "id_user"),
             inverseJoinColumns = @JoinColumn(name = "id_authority"))
     private List<Authority> authorityList;
 
     public User(){}
 
-    public User(String userName, String password, ReaderCard readerCard, List<Authority> authorityList) {
-        this.userName = userName;
+    public User(String username, String password, ReaderCard readerCard, List<Authority> authorityList) {
+        this.username = username;
         this.password = password;
         this.readerCard = readerCard;
         this.authorityList = authorityList;
@@ -55,7 +53,7 @@ public class User implements Serializable, UserDetails {
 
     @Override
     public String getUsername() {
-        return null;
+        return this.username;
     }
 
     @Override

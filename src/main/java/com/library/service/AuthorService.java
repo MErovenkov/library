@@ -45,15 +45,17 @@ public class AuthorService implements IAuthorService {
     public Author createAuthor(Author author) {
         try {
             if (author != null) {
-                if (Validator.getInstance().validationFullNameCheck(
-                        author.getSurname(),
-                        author.getName(),
-                        author.getPatronymic())) {
-                    return this.authorDao.create(author);
+                if (Validator.getInstance().validationFullNameCheck(author)) {
+                    author = (Author) NamingFormatter.getInstance().formatFullName(author);
+                    if (author != null) {
+                        return this.authorDao.create(author);
+                    }
                 }
             }
         } catch (PersistenceException e) {
             //TODO: 03.02.2020 повторяющееся значение ключа нарушает ограничение уникальности
+        } catch (StringIndexOutOfBoundsException e) {
+            log.error( "" + e);
         }
 
         return null;
@@ -69,20 +71,21 @@ public class AuthorService implements IAuthorService {
     @Override
     public Author updateAuthor(Integer idAuthor, Author newDataAuthor) {
         try {
-            if (Validator.getInstance().validationFullNameCheck(
-                    newDataAuthor.getSurname(),
-                    newDataAuthor.getName(),
-                    newDataAuthor.getPatronymic())) {
+            if (newDataAuthor != null || Validator.getInstance().validationFullNameCheck(newDataAuthor)) {
                 Author author = this.authorDao.findOneById(idAuthor);
 
                 if (author != null) {
                     newDataAuthor = (Author) NamingFormatter.getInstance().formatFullName(newDataAuthor);
 
-                    author.setSurname(newDataAuthor.getSurname());
-                    author.setName(newDataAuthor.getName());
-                    author.setPatronymic(newDataAuthor.getPatronymic());
+                    if (newDataAuthor != null) {
+                        author.setSurname(newDataAuthor.getSurname());
+                        author.setName(newDataAuthor.getName());
+                        author.setPatronymic(newDataAuthor.getPatronymic());
 
-                    return this.authorDao.update(author);
+                        return this.authorDao.update(author);
+                    } else {
+                        log.warn("StringIndexOutOfBoundsException..... ");
+                    }
                 } else {
                     log.warn("Автора с таким id не возможно изменить т.к. его не существует");
                     //TODO: 03.02.2020 выбросить фронт exception
@@ -90,6 +93,8 @@ public class AuthorService implements IAuthorService {
             }
         } catch (DataIntegrityViolationException e) {
             //TODO: 03.02.2020 ОШИБКА: повторяющееся значение ключа нарушает ограничение уникальности
+        } catch (StringIndexOutOfBoundsException e) {
+            log.error( "" + e);
         }
 
         return null;

@@ -8,6 +8,10 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Класс, описывающий роль пользователя в приложении
+ * */
+
 @Getter
 @Setter
 @Entity
@@ -23,10 +27,10 @@ public class Authority implements Serializable {
     private String nameAuthority;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "authorityList", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "authorityList")
     private List<User> usersList;
 
-    private Authority(){}
+    public Authority(){}
 
     public Authority(String nameAuthority, List<User> usersList) {
         this.nameAuthority = nameAuthority;

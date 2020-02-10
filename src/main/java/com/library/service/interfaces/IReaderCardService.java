@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface IReaderCardService {
 
+    ReaderCard createReaderCard(Integer idUser, ReaderCard readerCard);
+
     ReaderCard updateReaderCard(Integer idReaderCard, ReaderCard newDataReaderCard);
 
     ReaderCard findReaderCardById(Integer idReaderCard);
@@ -18,5 +20,4 @@ public interface IReaderCardService {
 
     List<ReaderCard> findSortReadersCardsList(SortingComparator sortingComparator);
 
-    List<Entry> findEntriesByReaderCard(Integer idReaderCard);
 }

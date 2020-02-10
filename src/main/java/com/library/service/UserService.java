@@ -3,13 +3,8 @@ package com.library.service;
 import com.library.dao.interfaces.IAuthorityDao;
 import com.library.dao.interfaces.IReaderCardDao;
 import com.library.dao.interfaces.IUserDao;
-import com.library.model.Author;
-import com.library.model.Authority;
-import com.library.model.Entry;
-import com.library.model.User;
+import com.library.model.*;
 import com.library.service.interfaces.IUserService;
-import com.library.utils.NamingFormatter;
-import com.library.utils.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -59,23 +54,7 @@ public class UserService implements IUserService, UserDetailsService {
     public User createUser(User user) {
         try {
             if (user != null) {
-                if (user.getReaderCard() != null) {
-                    if (Validator.getInstance().validationFullNameCheck(
-                            user.getReaderCard().getSurname(),
-                            user.getReaderCard().getName(),
-                            user.getReaderCard().getPatronymic())) {
-                        user.getReaderCard().setPenalty(0);
-                        user.getReaderCard().setMaxBooksTaken(3);
-
-                        this.readerCardDao.create(user.getReaderCard());
-
-                        return this.userDao.create(user);
-                    }
-                } else {
-                    log.warn("");
-                }
-            } else {
-                log.warn("");
+                return this.userDao.create(user);
             }
         } catch (PersistenceException e) {
             //TODO: 03.02.2020 повторяющееся значение ключа нарушает ограничение уникальности
@@ -92,7 +71,7 @@ public class UserService implements IUserService, UserDetailsService {
             if (user != null) {
                 if (user.getPassword() != null && !user.getPassword().trim().equals("")) {
                     if (user.getUsername() != null && !user.getUsername().trim().equals("")) {
-                        user.setUserName(newDataUser.getUsername());
+                        user.setUsername(newDataUser.getUsername());
                         user.setPassword(newDataUser.getPassword());
 
                         return this.userDao.update(user);
@@ -121,7 +100,7 @@ public class UserService implements IUserService, UserDetailsService {
         if (user != null) {
             return this.userDao.deleteById(idUser);
         } else {
-            log.warn("Жанр с таким id невозможно удалить, т.к его не существует");
+            log.warn("Пользователя с таким id невозможно удалить, т.к его не существует");
             //TODO: 02.02.2020 выбросить фронт exception
         }
 
@@ -133,9 +112,9 @@ public class UserService implements IUserService, UserDetailsService {
         User user = this.userDao.findOneById(idUser);
 
         if (user != null) {
-            return this.userDao.findOneById(idUser);
+            return user;
         } else {
-            log.warn("Автора с таким id невозможно удалить, т.к его не существует");
+            log.warn("Пользователя с таким id невозможно найти, т.к его не существует");
             //TODO: 02.02.2020 выбросить фронт exception
         }
 

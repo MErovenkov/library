@@ -3,19 +3,17 @@ package com.library.service;
 import com.library.dao.interfaces.IBookDao;
 import com.library.dao.interfaces.IEntryDao;
 import com.library.dao.interfaces.IReaderCardDao;
-import com.library.dto.EntryDto;
 import com.library.model.Book;
 import com.library.model.Entry;
-import com.library.model.Genre;
+import com.library.model.ReaderCard;
 import com.library.model.enums.EntryStatus;
 import com.library.model.enums.SortingComparator;
 import com.library.service.interfaces.IEntryService;
-import com.library.utils.NamingFormatter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import java.time.LocalDate;
 import java.util.List;
@@ -34,52 +32,33 @@ public class EntryService implements IEntryService {
     private IReaderCardDao readerCardDao;
 
     @Override
-    public Entry createEntry(Entry entry) {
+    public Entry createEntry(Integer idReaderCard, String nameBook, LocalDate returnDatePlanned) {
         try {
-            if (entry != null) {
-                if (validationCheck(entry)) {
-                    entry.setEntryStatus(EntryStatus.OPEN);
-                    entry.setTakeDate(LocalDate.now());
+            ReaderCard readerCard = this.readerCardDao.findOneById(idReaderCard);
+            if (readerCard != null) {
+                if (readerCard.getMaxBooksTaken() > 0) {
+                    Book book = this.bookDao.findIsStockBookByName(nameBook);
 
-                    Book book = this.bookDao.findOneById(entry.getBook().getId());
-                    book.setInStock(false);
-                    this.bookDao.update(book);
+                    if (returnDatePlanned != null && LocalDate.now().isAfter(returnDatePlanned)) {
+                        readerCard.setMaxBooksTaken(readerCard.getMaxBooksTaken() - 1);
+                        Entry newEntry = new Entry(readerCard, book, returnDatePlanned);
 
-                    return this.entryDao.create(entry);
+                        return this.entryDao.create(newEntry);
+                    } else {
+                        log.warn("дата планир возврата, должа наступить позже чем дата создания запроса" +
+                                "и не должна быть null");
+                    }
+                } else {
+                    log.warn("лимит книг достигнут");
                 }
             } else {
-                log.warn("Попытка добавть null объект в жанры");
-                //TODO: 02.02.2020 выбросить фронт exception
+                log.warn("каточки нет с таким ид");
             }
-        } catch (PersistenceException e) {
-            //TODO: 02.02.2020 повторяющееся значение ключа нарушает ограничение уникальности "genre_name_key",
-            // жанр уже существует с таким именем.
+        } catch (NoResultException e) {
+            log.error("нет свободных книг");
         }
 
         return null;
-    }
-
-    private boolean validationCheck(Entry entry) {
-        boolean validate = false;
-
-        if (entry.getBook() != null
-                && this.bookDao.findOneById(entry.getBook().getId()) != null) {
-            if (entry.getReaderCard() != null
-                    && this.readerCardDao.findOneById(entry.getReaderCard().getId()) != null) {
-                if(entry.getReturnDatePlanned() != null) {
-                    validate = true;
-                } else {
-                    log.warn("даты, к когда нужно вернуть = нул");
-                }
-            } else {
-                log.warn("записаня карточка нул или не существует");
-            }
-        } else {
-            log.warn("книга нул или нет такой книги");
-            //todo:
-        }
-
-        return validate;
     }
 
     @Override
@@ -89,8 +68,20 @@ public class EntryService implements IEntryService {
         if (entry != null) {
             entry.setEntryStatus(EntryStatus.CLOSE);
             entry.setReturnDate(LocalDate.now());
-            this.bookDao.findOneById(entry.getBook().getId()).setInStock(true);
-            this.entryDao.update(entry);
+
+            Book book = this.bookDao.findOneById(entry.getBook().getId());
+            book.setInStock(true);
+
+            ReaderCard readerCard = this.readerCardDao.findOneById(entry.getReaderCard().getId());
+            readerCard.setMaxBooksTaken(readerCard.getMaxBooksTaken() + 1);
+
+            if(entry.getEntryStatus().equals(EntryStatus.EXPIRED)) {
+                readerCard.setPenalty(readerCard.getPenalty() - 1);
+            }
+
+            this.readerCardDao.update(readerCard);
+            this.bookDao.update(book);
+            return this.entryDao.update(entry);
         }
 
         return null;
@@ -116,13 +107,24 @@ public class EntryService implements IEntryService {
     }
 
     @Override
-    public List<Entry> findEntriesByBook(Integer idBook) {
+    public List<Entry> findEntriesByBookId(Integer idBook) {
         return this.bookDao.findEntriesByBook(idBook);
     }
 
+
     @Override
-    public List<Entry> findEntriesByReaderCard(Integer idReaderCard) {
-        return this.readerCardDao.findEntriesByReaderCard(idReaderCard);
+    public List<Entry> findEntriesByReaderCardId(Integer idReaderCard) {
+        return this.readerCardDao.findEntriesByReaderCardId(idReaderCard);
+    }
+
+    @Override
+    public List<Entry> findExpiredEntriesListByReaderCardId(Integer idReaderCard) {
+        return this.readerCardDao.findExpiredEntriesListByReaderCardId(idReaderCard);
+    }
+
+    @Override
+    public List<Entry> findOpenedEntriesListByReaderCardId(Integer idReaderCard) {
+        return this.readerCardDao.findOpenedEntriesListByReaderCardId(idReaderCard);
     }
 
     @Override
@@ -135,6 +137,8 @@ public class EntryService implements IEntryService {
         return this.entryDao.findAll();
     }
 
+
+    /////////////////
     @Override
     public List<Entry> findSortEntriesList(SortingComparator sortingComparator) {
         return null;

@@ -7,9 +7,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
-//todo:
 /**
- *
+ * Класс, описывает свойста книжного издателя
  */
 
 @Getter

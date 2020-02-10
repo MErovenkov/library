@@ -2,7 +2,6 @@ package com.library.controller;
 
 import com.library.dto.AuthorDto;
 import com.library.mapper.AuthorMapper;
-import com.library.model.Genre;
 import com.library.service.interfaces.IAuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -38,8 +37,9 @@ public class AuthorController {
     }
 
     //todo: admin
-    @PutMapping("/{idAuthor}/add-genre")
-    public AuthorDto addGenreToAuthor(@PathVariable Integer idAuthor,
+    @PutMapping("/{idAuthor}/add-genre" )
+    public AuthorDto addGenreToAuthor(/*@AuthenticationPrincipal Account account,*/
+            @PathVariable Integer idAuthor,
                                       @RequestParam Integer idGenre) {
         return this.authorMapper.convertToDto(
                 this.authorService.addGenreToAuthor(idAuthor, idGenre));

@@ -1,14 +1,14 @@
 package com.library.service.interfaces;
 
-import com.library.dto.EntryDto;
 import com.library.model.Entry;
 import com.library.model.enums.SortingComparator;
-import org.springframework.web.bind.annotation.PathVariable;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface IEntryService {
-    Entry createEntry(Entry entry);
+
+    Entry createEntry(Integer idReaderCard, String nameBook, LocalDate returnDatePlanned);
 
     Entry closedEntryById(Integer idEntry);
 
@@ -16,9 +16,13 @@ public interface IEntryService {
 
     Entry findEntryById(Integer idEntry);
 
-    List<Entry> findEntriesByBook(Integer idBook);
+    List<Entry> findEntriesByBookId(Integer idBook);
 
-    List<Entry> findEntriesByReaderCard(Integer idReaderCard);
+    List<Entry> findEntriesByReaderCardId(Integer idReaderCard);
+
+    List<Entry> findExpiredEntriesListByReaderCardId(Integer idReaderCard);
+
+    List<Entry> findOpenedEntriesListByReaderCardId(Integer idReaderCard);
 
     List<Entry> findExpiredEntriesList();
 

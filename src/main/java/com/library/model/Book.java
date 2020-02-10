@@ -9,6 +9,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Класс, характеризующий сущность книги в приложении
+ * */
 @Getter
 @Setter
 @Entity
@@ -38,12 +41,21 @@ public class Book implements Serializable {
     @JoinColumn(name = "id_publisher")
     private Publisher publisher;
 
+    /**
+     * @param shortSpecification
+     * обозначает перемунную, содержащую краткое описание книги
+     * */
     @Column(name = "short_specification")
     private String shortSpecification;
 
     @Column(name = "number_pages")
     private Integer numberPages;
 
+
+    /**
+     * @param inStock
+     * показывает состояние книги: в наличии или на руках
+     * */
     @Column(name = "in_stock")
     private boolean inStock;
 

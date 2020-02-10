@@ -1,7 +1,5 @@
 package com.library.dto;
 
-import com.library.model.Book;
-import com.library.model.ReaderCard;
 import com.library.model.enums.EntryStatus;
 import lombok.Getter;
 import lombok.Setter;

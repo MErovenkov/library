@@ -9,10 +9,6 @@ import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
@@ -22,7 +18,6 @@ public class GenreDao extends AbstractJpaDao<Genre> implements IGenreDao {
         setClazz(Genre.class);
     }
 
-    //todo:
     @Override
     public List<Author> findAuthorsByGenre(Integer idGenre) throws NoResultException {
         Genre genre = this.findOneById(idGenre);
@@ -40,7 +35,6 @@ public class GenreDao extends AbstractJpaDao<Genre> implements IGenreDao {
         return null;
     }
 
-    //todo:
     @Override
     public List<Book> findBooksByGenre(Integer idGenre) {
         Genre genre = this.findOneById(idGenre);

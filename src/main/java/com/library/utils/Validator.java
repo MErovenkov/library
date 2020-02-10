@@ -1,6 +1,6 @@
 package com.library.utils;
 
-import com.library.model.Genre;
+import com.library.model.Person;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -15,7 +15,7 @@ public class Validator {
         return validator;
     }
 
-    //todo: need test
+    //todo: need test log
     public boolean validationCheckName(String name) {
         boolean validate = false;
 
@@ -43,18 +43,18 @@ public class Validator {
         return validate;
     }
 
-    public boolean validationFullNameCheck(String surname, String name, String patronymic) {
+    public boolean validationFullNameCheck(Person person) {
         boolean validate = false;
 
-        if (surname != null
-                && name != null
-                && patronymic != null) {
-            if (!(surname.trim().equals("")
-                    && name.trim().equals("")
-                    && patronymic.trim().equals(""))) {
-                if (surname.chars().allMatch(Character::isLetter)
-                        &&  name.chars().allMatch(Character::isLetter)
-                        && patronymic.chars().allMatch(Character::isLetter)) {
+        if (person.getSurname() != null
+                && person.getName() != null
+                && person.getPatronymic() != null) {
+            if (!(person.getSurname().trim().equals("")
+                    && person.getName().trim().equals("")
+                    && person.getPatronymic().trim().equals(""))) {
+                if (person.getSurname().chars().allMatch(Character::isLetter)
+                        && person.getName().chars().allMatch(Character::isLetter)
+                        && person.getPatronymic().chars().allMatch(Character::isLetter)) {
                     validate = true;
                 } else {
                     log.warn("Полное имя должна состоять только из букв "

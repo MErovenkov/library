@@ -58,7 +58,6 @@ public class AuthorDao extends AbstractJpaDao<Author> implements IAuthorDao {
         return authorList;
     }
 
-//todo:
     @Override
     public List<Book> findBooksByAuthor(Integer idGenre) {
         Author author = this.findOneById(idGenre);

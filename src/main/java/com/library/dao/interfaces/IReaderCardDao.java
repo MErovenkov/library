@@ -10,5 +10,9 @@ public interface IReaderCardDao extends IGenericDao<ReaderCard>, ISearchingByFul
 
     List<ReaderCard> findSortReadersCardsList(SortingComparator sortingComparator);
 
-    List<Entry> findEntriesByReaderCard(Integer idReaderCard);
+    List<Entry> findEntriesByReaderCardId(Integer idReaderCard);
+
+    List<Entry> findExpiredEntriesListByReaderCardId(Integer idReaderCard);
+
+    List<Entry> findOpenedEntriesListByReaderCardId(Integer idReaderCard);
 }

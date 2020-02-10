@@ -1,5 +1,6 @@
 package com.library.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,14 +30,18 @@ public class ReaderCard extends Person {
     @Column(name = "max_books_taken")
     private Integer maxBooksTaken;
 
-    @OneToMany(mappedBy = "readerCard", cascade = CascadeType.REFRESH)
+    @JsonIgnore
+    @OneToMany(mappedBy = "readerCard")
     private List<Entry> entryList;
 
-    @OneToOne
-    @JoinColumn(name = "id_user")
+    @JsonIgnore
+    @OneToOne(mappedBy = "readerCard")
     private User user;
 
-    public ReaderCard(){}
+    public ReaderCard(){
+        this.penalty = 0;
+        this.maxBooksTaken = 3;
+    }
 
     public ReaderCard(String surname, String name, String patronymic, Integer numberPhone, String email) {
         super(surname, name, patronymic);
