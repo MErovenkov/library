@@ -69,18 +69,9 @@ public class EntryService implements IEntryService {
             entry.setEntryStatus(EntryStatus.CLOSE);
             entry.setReturnDate(LocalDate.now());
 
-            Book book = this.bookDao.findOneById(entry.getBook().getId());
-            book.setInStock(true);
+            stateChangingBook(entry);
+            stateChangingReaderCard(entry);
 
-            ReaderCard readerCard = this.readerCardDao.findOneById(entry.getReaderCard().getId());
-            readerCard.setMaxBooksTaken(readerCard.getMaxBooksTaken() + 1);
-
-            if(entry.getEntryStatus().equals(EntryStatus.EXPIRED)) {
-                readerCard.setPenalty(readerCard.getPenalty() - 1);
-            }
-
-            this.readerCardDao.update(readerCard);
-            this.bookDao.update(book);
             return this.entryDao.update(entry);
         }
 
@@ -92,6 +83,13 @@ public class EntryService implements IEntryService {
         Entry entry = this.entryDao.findOneById(idEntry);
 
         if (entry != null) {
+
+            Book book = this.bookDao.findOneById(entry.getBook().getId());
+            book.setInStock(true);
+
+            stateChangingBook(entry);
+            stateChangingReaderCard(entry);
+
             return this.entryDao.deleteById(idEntry);
         } else {
             log.warn("Жанр с таким id невозможно удалить, т.к его не существует");
@@ -99,6 +97,24 @@ public class EntryService implements IEntryService {
         }
 
         return null;
+    }
+
+    private void stateChangingReaderCard(Entry entry) {
+        ReaderCard readerCard = this.readerCardDao.findOneById(entry.getReaderCard().getId());
+        readerCard.setMaxBooksTaken(readerCard.getMaxBooksTaken() + 1);
+
+        if(entry.getEntryStatus().equals(EntryStatus.EXPIRED)) {
+            readerCard.setPenalty(readerCard.getPenalty() - 1);
+        }
+
+        this.readerCardDao.update(readerCard);
+    }
+
+    private void stateChangingBook(Entry entry) {
+        Book book = this.bookDao.findOneById(entry.getBook().getId());
+        book.setInStock(true);
+
+        this.bookDao.update(book);
     }
 
     @Override
