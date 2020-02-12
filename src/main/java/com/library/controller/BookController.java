@@ -28,6 +28,13 @@ public class BookController {
     }
 
     //todo: admin
+    @PostMapping("/add-exist")
+    public BookDto createExistBook(@RequestParam(name = "id") Integer idBook) {
+        return this.bookMapper.convertToDto(
+                this.bookService.addExistBook(idBook));
+    }
+
+    //todo: admin
     @PutMapping("/{idBook}")
     public BookDto updateBook(@PathVariable Integer idBook,
                              @RequestBody BookDto bookDto) {

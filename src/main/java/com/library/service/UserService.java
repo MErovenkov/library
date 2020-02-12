@@ -8,8 +8,6 @@ import com.library.service.interfaces.IUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,9 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.PersistenceException;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Slf4j
 @Service
@@ -37,9 +33,24 @@ public class UserService implements IUserService, UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+
+    @Override
+    public UserDetails loadUserByUsername(String username) {
+        User user = userDao.findByUsername(username);
+
+        System.out.println(username);
+        System.out.println(user.getUsername());
+        if (user == null) {
+            throw new UsernameNotFoundException(username);
+        }
+        return user;
+    }
+/*
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = this.userDao.findByUsername(username);
+
+        System.out.println(user);
 
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 
@@ -47,8 +58,9 @@ public class UserService implements IUserService, UserDetailsService {
             grantedAuthorities.add(new SimpleGrantedAuthority(authority.getNameAuthority()));
         }
 
+        System.out.println(user.getUsername() + "      " + user.getPassword() + "        " + grantedAuthorities);
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
-    }
+    }*/
 
     @Override
     public User createUser(User user) {
@@ -71,7 +83,7 @@ public class UserService implements IUserService, UserDetailsService {
             if (user != null) {
                 if (user.getPassword() != null && !user.getPassword().trim().equals("")) {
                     if (user.getUsername() != null && !user.getUsername().trim().equals("")) {
-                        user.setUsername(newDataUser.getUsername());
+                        user.setUserName(newDataUser.getUsername());
                         user.setPassword(newDataUser.getPassword());
 
                         return this.userDao.update(user);
@@ -125,4 +137,5 @@ public class UserService implements IUserService, UserDetailsService {
     public List<User> findUsersList() {
         return this.userDao.findAll();
     }
+
 }

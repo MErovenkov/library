@@ -1,15 +1,17 @@
 package com.library.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -23,7 +25,7 @@ public class User implements Serializable, UserDetails {
     private Integer id;
 
     @Column(name = "username")
-    private String username;
+    private String userName;
 
     @Column(name = "password")
     private String password;
@@ -40,7 +42,7 @@ public class User implements Serializable, UserDetails {
     public User(){}
 
     public User(String username, String password, ReaderCard readerCard, List<Authority> authorityList) {
-        this.username = username;
+        this.userName = username;
         this.password = password;
         this.readerCard = readerCard;
         this.authorityList = authorityList;
@@ -48,12 +50,17 @@ public class User implements Serializable, UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+
+        for (Authority authority : this.authorityList) {
+            grantedAuthorities.add(new SimpleGrantedAuthority(authority.getNameAuthority()));
+        }
+        return grantedAuthorities;
     }
 
     @Override
     public String getUsername() {
-        return this.username;
+        return this.userName;
     }
 
     @Override

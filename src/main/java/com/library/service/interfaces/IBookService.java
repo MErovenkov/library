@@ -1,16 +1,15 @@
 package com.library.service.interfaces;
 
-import com.library.model.Author;
 import com.library.model.Book;
-import com.library.model.Genre;
 import com.library.model.enums.SortingComparator;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 public interface IBookService {
 
     Book createBook(Book book);
+
+    Book addExistBook(Integer idBook);
 
     Book updateBook(Integer idBook, Book newDataBook);
 

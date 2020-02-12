@@ -1,10 +1,16 @@
 package com.library.utils;
 
 import com.library.model.Person;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-@Slf4j
+
 public class Validator {
+
+    private static final Logger log = LogManager.getLogger(Validator.class);
 
     private static Validator validator;
 
@@ -26,7 +32,7 @@ public class Validator {
 
                 } else {
                     log.warn("Имя должна состоять только из букв "
-                            + new Throwable().getStackTrace()[1].getMethodName());
+                            + new Throwable().getStackTrace()[1]);
                     //TODO: 02.02.2020 выбросить фронт exception
                 }
             } else {

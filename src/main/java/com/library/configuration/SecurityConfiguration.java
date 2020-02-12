@@ -1,6 +1,7 @@
 package com.library.configuration;
 
 import com.library.service.UserService;
+import com.library.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +9,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 /*
@@ -18,29 +20,35 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+   @Autowired
+    private UserDetailsService userDetailsService;
+
     @Bean
     public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Autowired
-    public void configureGlobalSecurity(AuthenticationManagerBuilder auth,
-                                        UserService userDetailsService) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+    public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
+        //System.out.println("tut");
+        auth
+                .inMemoryAuthentication()
+                .withUser("123").password("123").roles("USER");
+        //auth.userDetailsService(userDetailsService)/*.passwordEncoder(passwordEncoder);
     }
 
 
 //todo: hasAnyRole
-
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                .antMatchers("/books/", "/login", "/genres/**", "/genres**")
-                .permitAll()
-                .antMatchers("/authors/**", "/publishing/**")
-                .authenticated()
-                .anyRequest().access("hasRole('USER') and hasRole('ADMIN')") //hasAnyRole
+http.
+        authorizeRequests()
+        .antMatchers("/", "/books").permitAll()
+        .anyRequest().authenticated()
                 .and()
-                .formLogin();
+                .formLogin().permitAll()
+        .and()
+        .logout().permitAll();
+
     }
 }*/

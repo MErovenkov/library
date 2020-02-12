@@ -17,7 +17,7 @@ public interface UserMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "readerCard", ignore = true)
-    @Mapping(target = "username", source = "username")
+    @Mapping(target = "userName", source = "username")
     @Mapping(target = "password", source = "password")
     @Mapping(target = "authorityList", source = "authorityDtoList")
     User convertToEntity(UserDto userDto);

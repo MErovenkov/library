@@ -54,6 +54,22 @@ public class BookService implements IBookService {
         return null;
     }
 
+    @Override
+    public Book addExistBook(Integer idBook) {
+        Book book = this.bookDao.findOneById(idBook);
+
+        if (book != null) {
+            Book newBook = new Book(book.getName(), book.getAuthor(), book.getGenre(),
+                    book.getPublisher(), book.getShortSpecification(), book.getNumberPages());
+
+            return this.bookDao.create(newBook);
+        } else {
+            log.warn("добавить ещё одну такуюже книгу не выйдет, т.к. исходной книги не существует");
+        }
+
+        return null;
+    }
+
 
     @Override
     public Book updateBook(Integer idBook, Book newDataBook) {
