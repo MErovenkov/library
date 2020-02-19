@@ -1,7 +1,5 @@
 package com.library.service;
 
-import com.library.dao.interfaces.IAuthorityDao;
-import com.library.dao.interfaces.IReaderCardDao;
 import com.library.dao.interfaces.IUserDao;
 import com.library.model.*;
 import com.library.service.interfaces.IUserService;
@@ -11,6 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.PersistenceException;
@@ -24,48 +23,24 @@ public class UserService implements IUserService, UserDetailsService {
     private IUserDao userDao;
 
     @Autowired
-    private IReaderCardDao readerCardDao;
-
-    @Autowired
-    private IAuthorityDao authorityDao;
-/*
-    @Autowired
     private PasswordEncoder passwordEncoder;
-*/
 
     @Override
-    public UserDetails loadUserByUsername(String username) {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userDao.findByUsername(username);
 
-        System.out.println(username);
-        System.out.println(user.getUsername());
         if (user == null) {
             throw new UsernameNotFoundException(username);
         }
         return user;
     }
-/*
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = this.userDao.findByUsername(username);
-
-        System.out.println(user);
-
-        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-
-        for (Authority authority : user.getAuthorityList()) {
-            grantedAuthorities.add(new SimpleGrantedAuthority(authority.getNameAuthority()));
-        }
-
-        System.out.println(user.getUsername() + "      " + user.getPassword() + "        " + grantedAuthorities);
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
-    }*/
 
     @Override
     public User createUser(User user) {
         try {
             if (user != null) {
                 if (validationCheck(user)) {
+                    user.setPassword(passwordEncoder.encode(user.getPassword()));
                     return this.userDao.create(user);
                 }
             } else {

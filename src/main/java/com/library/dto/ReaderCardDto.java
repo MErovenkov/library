@@ -19,7 +19,5 @@ public class ReaderCardDto {
 
     private String email;
 
-    private Integer penalty;
-
     private Integer maxBooksTaken;
 }

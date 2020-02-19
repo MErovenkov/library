@@ -26,7 +26,13 @@ public class UserDao extends AbstractJpaDao<User> implements IUserDao {
         criteriaQuery.select(root)
                 .where(criteriaBuilder.equal(root.get("userName"), username));
 
-        return entityManager.createQuery(criteriaQuery).getSingleResult();
+        User user = entityManager.createQuery(criteriaQuery).getSingleResult();
+
+        if (user != null) {
+            Hibernate.initialize(user.getAuthorityList());
+        }
+
+        return user;
     }
 
     @Override

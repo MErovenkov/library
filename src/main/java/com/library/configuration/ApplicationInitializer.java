@@ -11,8 +11,7 @@ public class ApplicationInitializer extends AbstractAnnotationConfigDispatcherSe
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        //return new Class[] {SecurityConfiguration.class};
-        return new Class[] {HibernateConfiguration.class}; //+securityconf
+        return new Class[] {HibernateConfiguration.class, SecurityConfiguration.class};
     }
 
     @Override
