@@ -1,9 +1,7 @@
 package com.library.controller;
 
 import com.library.dto.ReaderCardDto;
-import com.library.dto.UserDto;
 import com.library.mapper.ReaderCardMapper;
-import com.library.model.ReaderCard;
 import com.library.service.interfaces.IReaderCardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +38,7 @@ public class ReaderCardController {
                         this.readerCardMapper.convertToEntity(readerCardDto)));
     }
 
+    /*@AuthenticationPrincipal User user,*/
     //todo: admin/ user?id привязка
     @GetMapping("/{idReaderCard}")
     public ReaderCardDto findReaderCardById(@PathVariable Integer idReaderCard) {

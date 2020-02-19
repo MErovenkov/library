@@ -2,7 +2,6 @@ package com.library.controller;
 
 import com.library.dto.UserDto;
 import com.library.mapper.UserMapper;
-import com.library.model.User;
 import com.library.service.interfaces.IReaderCardService;
 import com.library.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;

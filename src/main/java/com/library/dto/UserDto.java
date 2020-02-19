@@ -1,6 +1,5 @@
 package com.library.dto;
 
-import com.library.model.Authority;
 import lombok.Getter;
 import lombok.Setter;
 

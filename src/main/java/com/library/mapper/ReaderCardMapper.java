@@ -13,7 +13,6 @@ public interface ReaderCardMapper {
     ReaderCardDto convertToDto(ReaderCard readerCard);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "penalty", ignore = true)
     @Mapping(target = "maxBooksTaken", ignore = true)
     ReaderCard convertToEntity(ReaderCardDto readerCardDto);
 

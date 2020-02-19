@@ -11,10 +11,12 @@ public class ApplicationInitializer extends AbstractAnnotationConfigDispatcherSe
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
+        //return new Class[] {SecurityConfiguration.class};
         return new Class[] {HibernateConfiguration.class}; //+securityconf
     }
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return new Class[] {WebConfiguration.class};}
+        return new Class[] {WebConfiguration.class};
+    }
 }

@@ -15,10 +15,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import java.util.List;
 
-//todo: описание, логирование исключений, сообщения на сторону клиента. сортировка
-/**
- *
- * */
 @Slf4j
 @Service
 public class BookService implements IBookService {
@@ -35,25 +31,32 @@ public class BookService implements IBookService {
     @Autowired
     private IPublisherDao publisherDao;
 
-
+    /**
+     * Функция, проверяющая значение полученной книги на null, валидность,
+     * Определение статуса книги как true ("в наличие")
+     * */
     @Override
     public Book createBook(Book book) {
         try {
             if (book != null) {
                 if (validationCheck(book)) {
                     book.setInStock(true);
+
                     return this.bookDao.create(book);
                 }
             } else {
-                log.warn("");
+                log.warn("Попытка добавить книгу равную null");
             }
         } catch (PersistenceException e) {
-            //TODO: 03.02.2020 повторяющееся значение ключа нарушает ограничение уникальности
+            log.error("Книга с таким именем уже существует" + e);
         }
 
         return null;
     }
 
+    /**
+     * Функция, добавляющая уже существующую книгу.
+     * */
     @Override
     public Book addExistBook(Integer idBook) {
         Book book = this.bookDao.findOneById(idBook);
@@ -64,7 +67,7 @@ public class BookService implements IBookService {
 
             return this.bookDao.create(newBook);
         } else {
-            log.warn("добавить ещё одну такуюже книгу не выйдет, т.к. исходной книги не существует");
+            log.warn("Добавить ещё одну такуюже книгу не выйдет, т.к. исходной книги не существует");
         }
 
         return null;
@@ -85,8 +88,7 @@ public class BookService implements IBookService {
 
                 return this.bookDao.update(book);
             } else {
-                log.warn("");
-                //todo:http....
+                log.warn("Попытка изменить книгу, которой нет");
             }
         }
 
@@ -94,6 +96,9 @@ public class BookService implements IBookService {
     }
 
 
+    /**
+     * Функция, проверяющая поля книги на валидность
+     * */
     private boolean validationCheck(Book book) {
 
         boolean validate = false;
@@ -106,31 +111,32 @@ public class BookService implements IBookService {
                     if (book.getPublisher() != null
                             && this.publisherDao.findOneById(book.getPublisher().getId()) != null) {
                         if (book.getShortSpecification() != null) {
-                            if (book.getNumberPages() != null) {
+                            if (book.getNumberPages() != null
+                                    && book.getNumberPages() > 0) {
                                 validate = true;
                             } else {
-                                log.warn("сило страниц не должно быть нул");
-                                //todo: http,,,,
+                                log.warn("Число страниц не должно быть null и должно быть больше 0"
+                                        + new Throwable().getStackTrace()[1]);
                             }
                         } else {
-                            log.warn("описание книги недолжно быть нул");
-                            //todo: http,,,,
+                            log.warn("Описание книги недолжно быть null"
+                                    + new Throwable().getStackTrace()[1]);
                         }
                     } else {
-                        log.warn("издатель нул или нет в бд");
-                        //todo: http,,,,
+                        log.warn("Издатель у книги равен null или его нет в бд"
+                                + new Throwable().getStackTrace()[1]);
                     }
                 } else {
-                    log.warn("жанр нул или нет в бд");
-                    //todo: http,,,,
+                    log.warn("Жанр у книги равен null или его нет в бд"
+                            + new Throwable().getStackTrace()[1]);
                 }
             } else {
-                log.warn("Автор null или нет в бд");
-                //todo: http,,,,
+                log.warn("Автор у книги равен null или его нет в бд"
+                        + new Throwable().getStackTrace()[1]);
             }
         } else {
-            log.warn("имя книги не должно быть нул или пустым");
-            //todo: http,,,,
+            log.warn("Имя книги не должно быть нул или пустым"
+                    + new Throwable().getStackTrace()[1]);
         }
 
         return validate;
@@ -144,8 +150,7 @@ public class BookService implements IBookService {
         if (book != null) {
             return this.bookDao.deleteById(idBook);
         } else  {
-            log.warn("Книги с таким id не существует");
-            //TODO: http...
+            log.warn("Книга с таким id не существует");
         }
 
         return null;
@@ -165,7 +170,6 @@ public class BookService implements IBookService {
             log.error("Запрос на поиск по имени: " + nameBook
                     + " не выполнен, т.к.такого книги не существует", e);
 
-            // TODO: 02.02.2020 выбросить фронт exception
             return null;
         }
     }

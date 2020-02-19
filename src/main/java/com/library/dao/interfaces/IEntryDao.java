@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IEntryDao extends IGenericDao<Entry> {
 
-    Entry closedEntryById(Integer idEntry);
-
     List<Entry> findExpiredEntriesList();
+
+    List<Entry> findOpenEntriesList();
 }

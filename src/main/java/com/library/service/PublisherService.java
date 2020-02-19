@@ -11,11 +11,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import java.util.List;
 
-//todo: описание, логирование исключений, сообщения на сторону клиента
-//TODO: 03.02.2020
-/**
- *
- * */
 @Slf4j
 @Service
 public class PublisherService implements IPublisherService {
@@ -23,10 +18,6 @@ public class PublisherService implements IPublisherService {
     @Autowired
     private IPublisherDao publisherDao;
 
-    //TODO: 03.02.2020
-    /**
-     *
-     * */
     @Override
     public Publisher createPublisher(Publisher publisher) {
         try {
@@ -36,21 +27,14 @@ public class PublisherService implements IPublisherService {
                 }
             } else {
                 log.warn("Попытка добавть объект равный null в издатели");
-                //TODO: 02.02.2020 выбросить фронт exception
             }
         } catch (PersistenceException e) {
-            //TODO: 02.02.2020 повторяющееся значение ключа нарушает ограничение уникальности ,
-            // уже существует с таким именем.
+            log.error("Издатель с таким данными уже существует" + e);
         }
 
         return null;
     }
 
-    //TODO: 03.02.2020
-    /**
-     *
-     *
-     * */
     @Override
     public Publisher updatePublisher(Integer idPublisher, Publisher newDataPublisher) {
         try {
@@ -64,19 +48,17 @@ public class PublisherService implements IPublisherService {
                     return this.publisherDao.update(publisher);
                 } else {
                     log.warn("Издателя с таким id не возможно изменить т.к. его не существует");
-                    //TODO: 02.02.2020 выбросить фронт exception
                 }
             }
         } catch (PersistenceException  e) {
-            //TODO: 02.02.2020 ОШИБКА: повторяющееся значение ключа нарушает ограничение уникальности
+            log.error("Издатель с таким данными уже существует" + e);
         }
+
         return null;
     }
 
-    //TODO: 03.02.2020
     /**
-     *  Функция
-     *
+     * Функция, проверяющая данные издателя на валидность
      * */
     private boolean validationCheck(Publisher publisher) {
         boolean validate = false;
@@ -85,22 +67,19 @@ public class PublisherService implements IPublisherService {
             if (!publisher.getName().trim().equals("") && !publisher.getAddress().trim().equals("")) {
                 validate = true;
             } else {
-                log.warn("Попытка " + new Throwable().getStackTrace()[1].getMethodName() +  " с пустыми полем(ями)");
-                //TODO: 02.02.2020 выбросить фронт exception
+                log.warn("Попытка " + new Throwable().getStackTrace()[1].getMethodName()
+                        +  " с пустыми полем(ями)"
+                        + new Throwable().getStackTrace()[1]);
             }
         } else {
-            log.warn("Попытка " + new Throwable().getStackTrace()[1].getMethodName() + " с полем(ями) равными null");
-            //TODO: 02.02.2020 выбросить фронт exception
+            log.warn("Попытка " + new Throwable().getStackTrace()[1].getMethodName()
+                    + " с полем(ями) равными null"
+                    + new Throwable().getStackTrace()[1]);
         }
 
         return validate;
     }
 
-    //TODO: 03.02.2020
-    /**
-     *  Функция
-     *
-     * */
     @Override
     public Publisher deletePublisherById(Integer idPublisher) {
         Publisher publisher = this.publisherDao.findOneById(idPublisher);
@@ -109,27 +88,16 @@ public class PublisherService implements IPublisherService {
             return this.publisherDao.delete(publisher);
         } else {
             log.warn("Издателя с таким id не существует");
-            //TODO: 02.02.2020 выбросить фронт exception
         }
 
         return null;
     }
 
-    //TODO: 03.02.2020
-    /**
-     *  Функция
-     *
-     * */
     @Override
     public Publisher findPublisherById(Integer idPublisher) {
         return this.publisherDao.findOneById(idPublisher);
     }
 
-    //TODO: 03.02.2020
-    /**
-     *  Функция
-     *
-     * */
     @Override
     public Publisher findPublisherByName(String namePublisher) {
         try {
@@ -138,16 +106,10 @@ public class PublisherService implements IPublisherService {
             log.error("Запрос на поиск по имени: " + namePublisher
                     + " не выполнен, т.к. такого издателя не существует", e);
 
-            // TODO: 02.02.2020 выбросить фронт exception
             return null;
         }
     }
 
-    //TODO: 03.02.2020
-    /**
-     *  Функция
-     *
-     * */
     @Override
     public List<Publisher> findPublishersList() {
         return this.publisherDao.findAll();

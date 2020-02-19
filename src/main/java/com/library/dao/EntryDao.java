@@ -18,11 +18,6 @@ public class EntryDao extends AbstractJpaDao<Entry> implements IEntryDao {
     }
 
     @Override
-    public Entry closedEntryById(Integer idEntry) {
-        return null;
-    }
-
-    @Override
     public List<Entry> findExpiredEntriesList() {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Entry> criteriaQuery = criteriaBuilder.createQuery(Entry.class);
@@ -30,6 +25,19 @@ public class EntryDao extends AbstractJpaDao<Entry> implements IEntryDao {
 
         criteriaQuery.select(root)
                 .where(criteriaBuilder.equal(root.get("entryStatus"), EntryStatus.EXPIRED));
+
+        return entityManager.createQuery(criteriaQuery)
+                .getResultList();
+    }
+
+    @Override
+    public List<Entry> findOpenEntriesList() {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Entry> criteriaQuery = criteriaBuilder.createQuery(Entry.class);
+        Root<Entry> root = criteriaQuery.from(Entry.class);
+
+        criteriaQuery.select(root)
+                .where(criteriaBuilder.equal(root.get("entryStatus"), EntryStatus.OPEN));
 
         return entityManager.createQuery(criteriaQuery)
                 .getResultList();

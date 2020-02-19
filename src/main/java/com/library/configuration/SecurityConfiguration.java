@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 /*
-@Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -30,25 +29,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
-        //System.out.println("tut");
-        auth
-                .inMemoryAuthentication()
-                .withUser("123").password("123").roles("USER");
+        auth.inMemoryAuthentication().withUser("a").password("123").roles("USER");
         //auth.userDetailsService(userDetailsService)/*.passwordEncoder(passwordEncoder);
     }
 
-
-//todo: hasAnyRole
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-http.
-        authorizeRequests()
-        .antMatchers("/", "/books").permitAll()
-        .anyRequest().authenticated()
-                .and()
-                .formLogin().permitAll()
-        .and()
-        .logout().permitAll();
 
+        http.authorizeRequests()
+                .antMatchers("/genres/",
+                        "/author/", "/author/search", "/author/genre",
+                        "/books/").hasAnyRole("ADMIN", "USER")
+                .antMatchers("/genres/**", "/author/**", "/books/**").hasAnyRole("ADMIN")
+                .and().formLogin().permitAll()
+                .and().logout().permitAll();
     }
 }*/

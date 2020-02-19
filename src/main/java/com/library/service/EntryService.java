@@ -11,6 +11,8 @@ import com.library.model.enums.SortingComparator;
 import com.library.service.interfaces.IEntryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.NoResultException;
@@ -19,6 +21,7 @@ import java.util.List;
 
 @Slf4j
 @Service
+@EnableScheduling
 public class EntryService implements IEntryService {
 
     @Autowired
@@ -30,36 +33,46 @@ public class EntryService implements IEntryService {
     @Autowired
     private IReaderCardDao readerCardDao;
 
+    /**
+     * Функция, добавления записи о том, какая книга и кем была взята.
+     * Проверяет, существует ли карточка, книга, для которых создаёться запись,
+     * проверяет не привышин ли лимит на взятие книг,
+     * корректность дат.
+     * */
     @Override
     public Entry createEntry(Integer idReaderCard, String nameBook, LocalDate returnDatePlanned) {
         try {
             ReaderCard readerCard = this.readerCardDao.findOneById(idReaderCard);
             if (readerCard != null) {
-                if (readerCard.getMaxBooksTaken() > 0) {
+                if ((this.readerCardDao.findExpiredEntriesListByReaderCardId(idReaderCard).size()
+                        + this.readerCardDao.findOpenedEntriesListByReaderCardId(idReaderCard).size())
+                            <= readerCard.getMaxBooksTaken()) {
                     Book book = this.bookDao.findIsStockBookByName(nameBook);
 
-                    if (returnDatePlanned != null && LocalDate.now().isAfter(returnDatePlanned)) {
-                        readerCard.setMaxBooksTaken(readerCard.getMaxBooksTaken() - 1);
+                    if (returnDatePlanned != null && LocalDate.now().isBefore(returnDatePlanned)) {
                         Entry newEntry = new Entry(readerCard, book, returnDatePlanned);
 
                         return this.entryDao.create(newEntry);
                     } else {
-                        log.warn("дата планир возврата, должа наступить позже чем дата создания запроса" +
+                        log.warn("Дата планируемого возвращения, должа наступить позже чем дата создания записи" +
                                 "и не должна быть null");
                     }
                 } else {
-                    log.warn("лимит книг достигнут");
+                    log.warn("Лимит книг достигнут у пользователя достигнут, поэтому нельзя создать новую запись");
                 }
             } else {
-                log.warn("каточки нет с таким ид");
+                log.warn("Карточки чиитателя с таким ид нет, запись создать невозможно");
             }
         } catch (NoResultException e) {
-            log.error("нет свободных книг");
+            log.error("Нет свободных книг, создать запись невозможно");
         }
 
         return null;
     }
 
+    /**
+     * Функция, служащая для закрытия записи при возврате книги.
+     * */
     @Override
     public Entry closedEntryById(Integer idEntry) {
         Entry entry = this.entryDao.findOneById(idEntry);
@@ -69,14 +82,18 @@ public class EntryService implements IEntryService {
             entry.setReturnDate(LocalDate.now());
 
             stateChangingBook(entry);
-            stateChangingReaderCard(entry);
 
             return this.entryDao.update(entry);
+        } else {
+            log.warn("Закрыть запись нельзя, так как её не существует");
         }
 
         return null;
     }
 
+    /**
+     * Функция, удаляющая запись из бд
+     * */
     @Override
     public Entry deleteEntryById(Integer idEntry) {
         Entry entry = this.entryDao.findOneById(idEntry);
@@ -87,28 +104,18 @@ public class EntryService implements IEntryService {
             book.setInStock(true);
 
             stateChangingBook(entry);
-            stateChangingReaderCard(entry);
 
             return this.entryDao.deleteById(idEntry);
         } else {
-            log.warn("Жанр с таким id невозможно удалить, т.к его не существует");
-            //TODO: 02.02.2020 выбросить фронт exception
+            log.warn("Запись с таким id невозможно удалить, т.к её не существует");
         }
 
         return null;
     }
 
-    private void stateChangingReaderCard(Entry entry) {
-        ReaderCard readerCard = this.readerCardDao.findOneById(entry.getReaderCard().getId());
-        readerCard.setMaxBooksTaken(readerCard.getMaxBooksTaken() + 1);
-
-        if(entry.getEntryStatus().equals(EntryStatus.EXPIRED)) {
-            readerCard.setPenalty(readerCard.getPenalty() - 1);
-        }
-
-        this.readerCardDao.update(readerCard);
-    }
-
+    /**
+     * Функция, изменяющая состояние книги
+     * */
     private void stateChangingBook(Entry entry) {
         Book book = this.bookDao.findOneById(entry.getBook().getId());
         book.setInStock(true);
@@ -152,15 +159,28 @@ public class EntryService implements IEntryService {
         return this.entryDao.findAll();
     }
 
-
     /////////////////
     @Override
     public List<Entry> findSortEntriesList(SortingComparator sortingComparator) {
         return null;
     }
 
-    //todo: метод
-    //todo: поток проверяющий на своевременный возврат книг,
-    //todo: если false ставит пенальти, делает список единовременно взятых книг меньше
-    //todo: штраф действует месяц, если книга возвращена; если возврата нет, то бесрочно.
+    /**
+     * Функция, по расписанию, каждый день в полночь, проверяющая все открытые записи на просроченность,
+     * при необходимости отмечает запись как просроченную.
+     * */
+    @Scheduled(cron = "0 0 0 * * *")
+    private void statusChangingEntry() {
+        List<Entry> entryList = this.entryDao.findOpenEntriesList();
+
+        if (entryList != null) {
+            for (Entry entry : entryList) {
+                if (entry.getReturnDatePlanned().isBefore(LocalDate.now())) {
+                    entry.setEntryStatus(EntryStatus.EXPIRED);
+
+                    this.entryDao.update(entry);
+                }
+            }
+        }
+    }
 }

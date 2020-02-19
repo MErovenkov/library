@@ -35,25 +35,25 @@ public class GenreController {
                         idGenre, this.genreMapper.convertToEntity(genreDto)));
     }
 
-    //todo: admin / user
+    //todo: admin
     @DeleteMapping("/{idGenre}")
     public GenreDto deleteGenreById(@PathVariable Integer idGenre) {
         return this.genreMapper.convertToDto(genreService.deleteGenreById(idGenre));
     }
 
-    //todo: admin / user
+    //todo: admin
     @GetMapping("/{idGenre}")
     public GenreDto findGenreById(@PathVariable Integer idGenre) {
         return this.genreMapper.convertToDto(this.genreService.findGenreById(idGenre));
     }
 
-    //todo: admin / user
+    //todo: admin
     @GetMapping("/name={nameGenre}")
     public GenreDto findGenreByName(@PathVariable String nameGenre) {
         return this.genreMapper.convertToDto(this.genreService.findGenreByName(nameGenre));
     }
 
-    //todo: admin / user
+    //todo: admin/user
     @GetMapping("/")
     public List<GenreDto> findGenresList() {
         return this.genreMapper.convertToListDto(genreService.findGenresList());

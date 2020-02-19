@@ -36,8 +36,6 @@ public class ReaderCardService implements IReaderCardService {
                 if (user.getReaderCard() == null) {
                     if (readerCard != null) {
                         if (Validator.getInstance().validationFullNameCheck(readerCard)) {
-                            System.out.println(readerCard.getName());
-
                             readerCard = (ReaderCard) NamingFormatter.getInstance().formatFullName(readerCard);
 
                             ReaderCard createdReaderCard = this.readerCardDao.create(readerCard);
@@ -51,20 +49,17 @@ public class ReaderCardService implements IReaderCardService {
                         log.warn("");
                     }
                 } else {
-                    log.warn("readercard not null");
+                    log.warn("Карточка читателя равна null");
                 }
             } else {
-                log.warn("user null");
+                log.warn("Пользователь равен null т.е. не существует, невозможно добавть ему карточку читателя");
             }
         } catch (PersistenceException e) {
-            //TODO: 03.02.2020 повторяющееся значение ключа нарушает ограничение уникальности
-        } catch (StringIndexOutOfBoundsException e) {
-            log.error( "" + e);
+            log.error("Читательская карточка с такими данными уже существует" + e);
         }
 
         return null;
     }
-
 
 
     @Override
@@ -76,23 +71,17 @@ public class ReaderCardService implements IReaderCardService {
                 if (readerCard != null) {
                     newDataReaderCard = (ReaderCard) NamingFormatter.getInstance().formatFullName(newDataReaderCard);
 
-                    if (newDataReaderCard != null) {
-                        readerCard.setSurname(newDataReaderCard.getSurname());
-                        readerCard.setName(newDataReaderCard.getName());
-                        readerCard.setPatronymic(newDataReaderCard.getPatronymic());
-                        return this.readerCardDao.update(readerCard);
-                    } else {
-                        log.warn("StringIndexOutOfBoundsException..... ");
-                    }
+                    readerCard.setSurname(newDataReaderCard.getSurname());
+                    readerCard.setName(newDataReaderCard.getName());
+                    readerCard.setPatronymic(newDataReaderCard.getPatronymic());
+
+                    return this.readerCardDao.update(readerCard);
                 } else {
                     log.warn("Карточку с таким id не возможно изменить т.к. её не существует");
-                    //TODO: 03.02.2020 выбросить фронт exception
                 }
             }
         } catch (DataIntegrityViolationException e) {
-            //TODO: 03.02.2020 ОШИБКА: повторяющееся значение ключа нарушает ограничение уникальности
-        } catch (StringIndexOutOfBoundsException e) {
-            log.error( "" + e);
+            log.error("Карточка с такими данными уже существует" + e);
         }
 
         return null;
@@ -106,7 +95,6 @@ public class ReaderCardService implements IReaderCardService {
             return this.readerCardDao.deleteById(idReaderCard);
         } else {
             log.warn("Карточку с таким id невозможно удалить, т.к её не существует");
-            //TODO: 02.02.2020 выбросить фронт exception
         }
 
         return null;

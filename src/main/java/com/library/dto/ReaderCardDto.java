@@ -1,7 +1,5 @@
 package com.library.dto;
 
-import com.library.model.Entry;
-import com.library.model.User;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -18,13 +18,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import java.util.List;
 
-//todo: описание, логирование исключений, сообщения на сторону клиента, транзакция
-//todo: не работает добавление новых жанров автору
-//TODO: 05.02.2020
-/**
- *
- * */
-
 @Slf4j
 @Service
 public class AuthorService implements IAuthorService {
@@ -35,11 +28,12 @@ public class AuthorService implements IAuthorService {
     @Autowired
     private IGenreDao genreDao;
 
-
-    //TODO: 03.02.2020
     /**
-     *  Функция
-     *
+     *  Функция, в которой полученные данные
+     *  проверяються на валидность,
+     *  задаёться определённый формат для фио,
+     *  после чего новый автор передаёться дальше в dao layer,
+     *  в случае удалного добавления возвращает объект.
      * */
     @Override
     public Author createAuthor(Author author) {
@@ -47,26 +41,25 @@ public class AuthorService implements IAuthorService {
             if (author != null) {
                 if (Validator.getInstance().validationFullNameCheck(author)) {
                     author = (Author) NamingFormatter.getInstance().formatFullName(author);
-                    if (author != null) {
-                        return this.authorDao.create(author);
-                    }
+
+                    return this.authorDao.create(author);
                 }
+            } else {
+                log.warn("Попытка добавить автора равного null");
             }
         } catch (PersistenceException e) {
-            //TODO: 03.02.2020 повторяющееся значение ключа нарушает ограничение уникальности
-        } catch (StringIndexOutOfBoundsException e) {
-            log.error( "" + e);
+            log.error("Попытка добваить автора, который уже существует" + e);
         }
 
         return null;
     }
 
-
-
-    //TODO: 03.02.2020
     /**
-     *  Функция
-     *
+     *  Функция, служит для обновления данных автора(фио)
+     *  Проверяет новые данные на валидность
+     *  Получает нужного автора по id из bd
+     *  Меняет старые значения на новые
+     *  Передаёт на другой слой для мержа в бд
      * */
     @Override
     public Author updateAuthor(Integer idAuthor, Author newDataAuthor) {
@@ -77,34 +70,25 @@ public class AuthorService implements IAuthorService {
                 if (author != null) {
                     newDataAuthor = (Author) NamingFormatter.getInstance().formatFullName(newDataAuthor);
 
-                    if (newDataAuthor != null) {
-                        author.setSurname(newDataAuthor.getSurname());
-                        author.setName(newDataAuthor.getName());
-                        author.setPatronymic(newDataAuthor.getPatronymic());
+                    author.setSurname(newDataAuthor.getSurname());
+                    author.setName(newDataAuthor.getName());
+                    author.setPatronymic(newDataAuthor.getPatronymic());
 
-                        return this.authorDao.update(author);
-                    } else {
-                        log.warn("StringIndexOutOfBoundsException..... ");
-                    }
+                    return this.authorDao.update(author);
                 } else {
                     log.warn("Автора с таким id не возможно изменить т.к. его не существует");
-                    //TODO: 03.02.2020 выбросить фронт exception
                 }
             }
         } catch (DataIntegrityViolationException e) {
-            //TODO: 03.02.2020 ОШИБКА: повторяющееся значение ключа нарушает ограничение уникальности
-        } catch (StringIndexOutOfBoundsException e) {
-            log.error( "" + e);
+            log.error("Автор с таким данными уже существует " + e);
         }
 
         return null;
     }
 
-
-    //TODO:
     /**
-     *  Функция
-     *
+     *  Функция, добваление существующему автору
+     *  Новый жанр, который уже занесён в бд.
      * */
     public Author addGenreToAuthor(Integer idAuthor, Integer idGenre) {
         try {
@@ -114,17 +98,21 @@ public class AuthorService implements IAuthorService {
             if (genre != null && author != null) {
                 return this.authorDao.addGenreToAuthor(author, genre);
             } else {
-                log.warn("!");
-                //TODO: 03.02.2020 выбросить фронт exception
+                log.warn("Жанра или автора с таким id не сужествует"
+                        + new Throwable().getStackTrace()[1].getMethodName());
             }
 
             return null;
         } catch (DataIntegrityViolationException e) {
-            log.error("" + e);
+            log.error("Попытка добавить автору жанр, которуй уже присутствует у него " + e);
+
             return null;
         }
     }
 
+    /**
+     * Функуия, позволяющаяя убрать у автора жанр
+     * */
     public Author deleteGenreToAuthor(Integer idAuthor, Integer idGenre) {
         Author author = this.authorDao.findOneById(idAuthor);
         Genre genre = this.genreDao.findOneById(idGenre);
@@ -132,18 +120,13 @@ public class AuthorService implements IAuthorService {
         if (genre != null && author != null) {
             return this.authorDao.deleteGenreToAuthor(author, genre);
         } else {
-            log.warn("!");
-            //TODO: 03.02.2020 выбросить фронт exception
+            log.warn("Жанра или автора с таким id не сужествует"
+                    + new Throwable().getStackTrace()[1].getMethodName());
         }
 
         return null;
     }
 
-    //TODO: 03.02.2020
-    /**
-     *  Функция
-     *
-     * */
     @Override
     public Author deleteAuthorById(Integer idAuthor) {
         Author author = this.authorDao.findOneById(idAuthor);
@@ -152,47 +135,34 @@ public class AuthorService implements IAuthorService {
             return this.authorDao.deleteById(idAuthor);
         } else {
             log.warn("Автора с таким id невозможно удалить, т.к его не существует");
-            //TODO: 02.02.2020 выбросить фронт exception
         }
 
         return null;
     }
 
-    //TODO: 03.02.2020
-    /**
-     *  Функция
-     *
-     * */
     @Override
     public Author findAuthorById(Integer idAuthor) {
         return this.authorDao.findOneById(idAuthor);
     }
 
-    //TODO: 03.02.2020
-    /**
-     *  Функция
-     *
-     * */
-    // todo: need test
     @Override
     public Author findAuthorByFullName(String surnameSearch, String nameSearch, String patronymicSearch) {
         try {
             return this.authorDao.findByFullName(surnameSearch, nameSearch, patronymicSearch);
         } catch (NoResultException e) {
+            log.error("Автора с таким фио в bd нет " + e);
             return null;
         }
     }
 
-    //TODO: 03.02.2020
-    /**
-     *  Функция
-     *
-     * */
     @Override
     public List<Author> findAuthorsList() {
         return this.authorDao.findAll();
     }
 
+    /**
+     * Функция, возвращающая список авторов по id жанра
+     * */
     @Override
     public List<Author> findAuthorsByGenre(Integer idGenre){
         return this.genreDao.findAuthorsByGenre(idGenre);

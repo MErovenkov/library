@@ -7,6 +7,10 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.List;
 
+/**
+ * Класс, описывающий читательскую карточку пользователя
+ * */
+
 @Getter
 @Setter
 @Entity
@@ -24,9 +28,10 @@ public class ReaderCard extends Person {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "penalty")
-    private Integer penalty;
-
+    /**
+     * @param maxBooksTaken
+     * обозначает максимальное значение книг, которое может быть у пользователя на руках
+     * */
     @Column(name = "max_books_taken")
     private Integer maxBooksTaken;
 
@@ -39,7 +44,6 @@ public class ReaderCard extends Person {
     private User user;
 
     public ReaderCard(){
-        this.penalty = 0;
         this.maxBooksTaken = 3;
     }
 
@@ -47,7 +51,6 @@ public class ReaderCard extends Person {
         super(surname, name, patronymic);
         this.numberPhone = numberPhone;
         this.email = email;
-        this.penalty = 0;
         this.maxBooksTaken = 3;
     }
 
@@ -55,7 +58,6 @@ public class ReaderCard extends Person {
         super(surname, name, patronymic);
         this.numberPhone = numberPhone;
         this.email = null;
-        this.penalty = 0;
         this.maxBooksTaken = 3;
     }
 }

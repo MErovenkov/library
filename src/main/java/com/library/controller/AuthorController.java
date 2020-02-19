@@ -38,8 +38,7 @@ public class AuthorController {
 
     //todo: admin
     @PutMapping("/{idAuthor}/add-genre" )
-    public AuthorDto addGenreToAuthor(/*@AuthenticationPrincipal Account account,*/
-            @PathVariable Integer idAuthor,
+    public AuthorDto addGenreToAuthor(@PathVariable Integer idAuthor,
                                       @RequestParam Integer idGenre) {
         return this.authorMapper.convertToDto(
                 this.authorService.addGenreToAuthor(idAuthor, idGenre));
@@ -59,14 +58,13 @@ public class AuthorController {
                 this.authorService.deleteAuthorById(idAuthor));
     }
 
-    //todo: admin / user
+    //todo: admin
     @GetMapping("/{idAuthor}")
     public AuthorDto findAuthorById(@PathVariable Integer idAuthor) {
         return this.authorMapper.convertToDto(
                 authorService.findAuthorById(idAuthor));
     }
 
-    //todo: подумать над тем, как лучше назвать запрос
     //todo: admin / user
     @GetMapping("/search")
     public AuthorDto findAuthorByFullName(@RequestParam(name = "surname") String surnameSearch,

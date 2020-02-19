@@ -11,7 +11,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.PersistenceException;
@@ -29,10 +28,10 @@ public class UserService implements IUserService, UserDetailsService {
 
     @Autowired
     private IAuthorityDao authorityDao;
-
+/*
     @Autowired
     private PasswordEncoder passwordEncoder;
-
+*/
 
     @Override
     public UserDetails loadUserByUsername(String username) {
@@ -66,10 +65,14 @@ public class UserService implements IUserService, UserDetailsService {
     public User createUser(User user) {
         try {
             if (user != null) {
-                return this.userDao.create(user);
+                if (validationCheck(user)) {
+                    return this.userDao.create(user);
+                }
+            } else {
+                log.warn("Пользователя равеного null добваить невозможно");
             }
         } catch (PersistenceException e) {
-            //TODO: 03.02.2020 повторяющееся значение ключа нарушает ограничение уникальности
+            log.error("Пользователь с таким username уже сужествует" + e);
         }
 
         return null;
@@ -81,28 +84,36 @@ public class UserService implements IUserService, UserDetailsService {
             User user = this.userDao.findOneById(idUser);
 
             if (user != null) {
-                if (user.getPassword() != null && !user.getPassword().trim().equals("")) {
-                    if (user.getUsername() != null && !user.getUsername().trim().equals("")) {
+                if (validationCheck(user)) {
                         user.setUserName(newDataUser.getUsername());
                         user.setPassword(newDataUser.getPassword());
 
                         return this.userDao.update(user);
-                    } else {
-                        log.warn("узернейм нул или пуст");
                     }
-                } else {
-                    log.warn("Пароль пользоватебя нул или пуст");
-                }
             } else {
                 log.warn("Пользователя с таким id не возможно изменить т.к. его не существует");
-                //TODO: 03.02.2020 выбросить фронт exception
             }
-
         } catch (DataIntegrityViolationException e) {
-            //TODO: 03.02.2020 ОШИБКА: повторяющееся значение ключа нарушает ограничение уникальности
+            log.error("Пользователь с таким username уже сужествует" + e);
         }
 
         return null;
+    }
+
+    private boolean validationCheck(User user) {
+        boolean validate = false;
+
+        if (user.getPassword() != null && !user.getPassword().trim().equals("")) {
+            if (user.getUsername() != null && !user.getUsername().trim().equals("")) {
+                validate = true;
+            } else {
+                log.warn("Username равен null или пуст" + new Throwable().getStackTrace()[1]);
+            }
+        } else {
+            log.warn("Пароль пользователя null или пуст" + new Throwable().getStackTrace()[1]);
+        }
+
+        return validate;
     }
 
     @Override
@@ -113,7 +124,6 @@ public class UserService implements IUserService, UserDetailsService {
             return this.userDao.deleteById(idUser);
         } else {
             log.warn("Пользователя с таким id невозможно удалить, т.к его не существует");
-            //TODO: 02.02.2020 выбросить фронт exception
         }
 
         return null;
@@ -127,7 +137,6 @@ public class UserService implements IUserService, UserDetailsService {
             return user;
         } else {
             log.warn("Пользователя с таким id невозможно найти, т.к его не существует");
-            //TODO: 02.02.2020 выбросить фронт exception
         }
 
         return null;

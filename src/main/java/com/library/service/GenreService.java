@@ -14,11 +14,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import java.util.List;
 
-//todo: описание, логирование исключений, сообщения на сторону клиента
-//TODO: 03.02.2020
-/**
- *
- * */
 @Slf4j
 @Service
 public class GenreService implements IGenreService {
@@ -26,20 +21,11 @@ public class GenreService implements IGenreService {
     @Autowired
     private IGenreDao genreDao;
 
-    //todo:изменить
     /**
-     *  Функция
-     *  @see GenreService#createGenre(Genre), получает
-     *  @param genre
-     *
-     *  проверяет его на значение null,
-     *  пооверка на валидность,
-     *  исключает использование в имени жанра цифр,
-     *  задаёт формат имени,
+     *  Функция, добавления жанра,
+     *  проверяет полученные данные на значение null,
+     *  пооверка на валидность имени, задаёт её формат,
      *  и исключает добовление дубликата, отлавливая исключение
-     *
-     *  @return возвращая результат операции ввиде объекта
-     *  или null в случае не соответствия условиям
      * */
     @Override
     public Genre createGenre(Genre genre) {
@@ -52,40 +38,24 @@ public class GenreService implements IGenreService {
                 }
             } else {
                 log.warn("Попытка добавть null объект в жанры");
-                //TODO: 02.02.2020 выбросить фронт exception
             }
         } catch (PersistenceException e) {
-            //TODO: 02.02.2020 повторяющееся значение ключа нарушает ограничение уникальности "genre_name_key",
-            // жанр уже существует с таким именем.
-        } catch (StringIndexOutOfBoundsException e) {
-            log.error( "" + e);
+            log.error("Попытка добавть жанр, который уже существует");
         }
 
         return null;
     }
 
-    //todo:изменить
     /**
-     *  Функция
-     *  @see GenreService#updateGenre(Integer, Genre), получает
-     *  @param idGenre - ид жанра, для нахождения нужного жанра для update
-     *  @param newDataGenre - новые данные, которые будут записаны в старый объект, полученный из бд
-     *
-     *  находит по {@param idGenre} нужный объект,
-     *  после проверки на null,
-     *  проверяет {@param newDataGenre} на валидность,
-     *  задаёт формат имени новых данных и
-     *  записывает их,
-     *  передаёт данные для записи в бд
-
-     *  @return возвращая результат операции ввиде перезописанного объекта
-     *  или значение null, если объект не был найден по {@param idGenre}
-     *  или {@param newDataGenre} не прошли валидность
+     *  Функция, изменяющая существующий жанр     *
+     *  Находит целевой жанр по ид,
+     *  проверяет новые данные на валидность,
+     *  меняет старые данные на новые, задавая определённый формат имени
      * */
     @Override
     public Genre updateGenre(Integer idGenre, Genre newDataGenre) {
         try {
-            if(Validator.getInstance().validationCheckName(newDataGenre.getName())) {
+            if (Validator.getInstance().validationCheckName(newDataGenre.getName())) {
                 Genre genre = this.genreDao.findOneById(idGenre);
 
                 if (genre != null) {
@@ -94,30 +64,16 @@ public class GenreService implements IGenreService {
                     return this.genreDao.update(genre);
                 } else {
                     log.warn("Жанр с таким id не возможно изменить т.к. его не существует");
-                    //TODO: 02.02.2020 выбросить фронт exception
                 }
             }
         } catch (DataIntegrityViolationException e) {
-            //TODO: 02.02.2020 ОШИБКА: повторяющееся значение ключа нарушает ограничение уникальности "genre_name_key"
-        } catch (StringIndexOutOfBoundsException e) {
-            log.error( "" + e);
+            log.error("Жанр с такими данными уже существует" + e);
         }
 
         return null;
     }
 
-    /**
-     *  Функция
-     *  @see GenreService#deleteGenreById(Integer)
-     *  @param idGenre
-     *
-     *  находит жанр по {@param idGenre},
-     *  проверяет полученное значение на null,
-     *  в случае присутстия такой записи в бд, удаляет её
-     *
-     *  @return в случае успешного удаления возвращает искомый жанр
-     *  или же значение null
-     */
+
     @Override
     public Genre deleteGenreById(Integer idGenre) {
         Genre genre = this.genreDao.findOneById(idGenre);
@@ -126,27 +82,16 @@ public class GenreService implements IGenreService {
             return this.genreDao.deleteById(idGenre);
         } else {
             log.warn("Жанр с таким id невозможно удалить, т.к его не существует");
-            //TODO: 02.02.2020 выбросить фронт exception
         }
 
         return null;
     }
 
-    //TODO: 03.02.2020
-    /**
-     *  Функция
-     *
-     * */
     @Override
     public Genre findGenreById(Integer idGenre) {
         return this.genreDao.findOneById(idGenre);
     }
 
-    //TODO: 03.02.2020
-    /**
-     *  Функция
-     *
-     * */
     @Override
     public Genre findGenreByName(String genreName) {
         try {
@@ -155,16 +100,10 @@ public class GenreService implements IGenreService {
             log.error("Запрос на поиск по имени: " + genreName
                     + " не выполнен, т.к.такого жанра не существует", e);
 
-            // TODO: 02.02.2020 выбросить фронт exception
             return null;
         }
     }
 
-    //TODO: 03.02.2020
-    /**
-     *  Функция
-     *
-     * */
     @Override
     public List<Genre> findGenresList() {
         return this.genreDao.findAll();

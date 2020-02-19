@@ -59,13 +59,13 @@ public class EntryController {
         return this.entryMapper.convertToListDto(this.entryService.findEntriesByReaderCardId(idReaderCard));
     }
 
-    @GetMapping("/reader-card-expired")
+    @GetMapping("/expired-by-reader-card")
     public List<EntryDto> findExpiredEntriesListByReaderCardId(@RequestParam(name = "id") Integer idReaderCard) {
         return this.entryMapper.convertToListDto(
                 this.entryService.findExpiredEntriesListByReaderCardId(idReaderCard));
     }
 
-    @GetMapping("/by-reader-card-open")
+    @GetMapping("/open-by-reader-card-open")
     public List<EntryDto> findOpenedEntriesListByReaderCardId(@RequestParam(name = "id") Integer idReaderCard) {
         return this.entryMapper.convertToListDto(
                 this.entryService.findOpenedEntriesListByReaderCardId(idReaderCard));
